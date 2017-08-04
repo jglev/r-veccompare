@@ -77,54 +77,56 @@ compare.vectors <- function(named_list_of_vectors_to_compare){
 				"elements_unique_to_first_element" = list_of_elements_unique_to_vectors
 			)
 
-			# #
-			# # Create a Venn Diagram if length(elements_involved) <= 5 (since that's the most the VennDiagram package can draw)
-			# #
-			# if(length(list_to_return$elements_involved) == 2){
-			# 	list_to_return$venn_diagram <- VennDiagram::draw.pairwise.venn(
-			# 		area1 = length(unique(vector_items_for_unique_names_in_row[[1]])),
-			# 		area2 = length(unique(vector_items_for_unique_names_in_row[[2]])),
-			# 		cross.area = length(list_to_return$overlap_of_elements),
-			# 		category = c(list_to_return$elements_involved[1], list_to_return$elements_involved[2]),
-			# 		lty = rep("blank", 2), # Line dash pattern of the circles
-			# 		fill = c("light blue", "light green"),
-			# 		alpha = rep(0.5, 2),
-			# 		cat.pos = rep(0, 2), # Category position around the circles (in degrees)
-			# 		cat.dist = rep(0.025, 2), # Category names' distances from the edges of the circles (can be negative)
-			# 		scaled = TRUE,
-			# 		margin = 0,
-			# 		cex = rep(1.5, 3),
-			# 		cat.cex = rep(1.5, 2),
-			# 		ind = FALSE # Do not automatically draw the diagram
-			# 	)
-			# } else if(length(list_to_return$elements_involved) == 3){
-			# 	list_to_return$venn_diagram <- VennDiagram::draw.triple.venn(
-			# 		area1 = length(unique(vector_items_for_unique_names_in_row[[1]])),
-			# 		area2 = length(unique(vector_items_for_unique_names_in_row[[2]])),
-			# 		area3 = length(unique(vector_items_for_unique_names_in_row[[3]])),
-			# 		n12 = length(output$unique_overlapping_elements_between_vectors_one_and_two),
-			# 		n23 = length(output$unique_overlapping_elements_between_vectors_two_and_three),
-			# 		n13 = length(output$unique_overlapping_elements_between_vectors_one_and_three),
-			# 		n123 = length(output$unique_overlapping_elements_between_vectors_one_two_and_three),
-			# 		category = c(label_one, label_two, label_three),
-			# 		lty = rep("blank", 3), # Line dash pattern of the circles
-			# 		fill = c("light blue", "light green", "pink"),
-			# 		alpha = rep(0.5, 3),
-			# 		cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
-			# 		cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
-			# 		scaled = TRUE,
-			# 		margin = 0,
-			# 		cex = rep(1.5, 7),
-			# 		cat.cex = rep(1.5, 3),
-			# 		ind = FALSE # Do not automatically draw the diagram
-			# 	)
-			# }
-
 			return(list_to_return)
 		}
 	)
 
 	# str(combination_set_operations)
+
+
+	# #
+	# # Create a Venn Diagram if length(elements_involved) <= 5 (since that's the most the VennDiagram package can draw)
+	# #
+	# if(length(list_to_return$elements_involved) == 2){
+	# 	list_to_return$venn_diagram <- VennDiagram::draw.pairwise.venn(
+	# 		area1 = length(unique(vector_items_for_unique_names_in_row[[1]])),
+	# 		area2 = length(unique(vector_items_for_unique_names_in_row[[2]])),
+	# 		cross.area = length(list_to_return$overlap_of_elements),
+	# 		category = c(list_to_return$elements_involved[1], list_to_return$elements_involved[2]),
+	# 		lty = rep("blank", 2), # Line dash pattern of the circles
+	# 		fill = c("light blue", "light green"),
+	# 		alpha = rep(0.5, 2),
+	# 		cat.pos = rep(0, 2), # Category position around the circles (in degrees)
+	# 		cat.dist = rep(0.025, 2), # Category names' distances from the edges of the circles (can be negative)
+	# 		scaled = TRUE,
+	# 		margin = 0,
+	# 		cex = rep(1.5, 3),
+	# 		cat.cex = rep(1.5, 2),
+	# 		ind = FALSE # Do not automatically draw the diagram
+	# 	)
+	# } else if(length(list_to_return$elements_involved) == 3){
+	# 	list_to_return$venn_diagram <- VennDiagram::draw.triple.venn(
+	# 		area1 = length(unique(vector_items_for_unique_names_in_row[[1]])),
+	# 		area2 = length(unique(vector_items_for_unique_names_in_row[[2]])),
+	# 		area3 = length(unique(vector_items_for_unique_names_in_row[[3]])),
+	# 		n12 = length(output$unique_overlapping_elements_between_vectors_one_and_two),
+	# 		n23 = length(output$unique_overlapping_elements_between_vectors_two_and_three),
+	# 		n13 = length(output$unique_overlapping_elements_between_vectors_one_and_three),
+	# 		n123 = length(output$unique_overlapping_elements_between_vectors_one_two_and_three),
+	# 		category = c(label_one, label_two, label_three),
+	# 		lty = rep("blank", 3), # Line dash pattern of the circles
+	# 		fill = c("light blue", "light green", "pink"),
+	# 		alpha = rep(0.5, 3),
+	# 		cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
+	# 		cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
+	# 		scaled = TRUE,
+	# 		margin = 0,
+	# 		cex = rep(1.5, 7),
+	# 		cat.cex = rep(1.5, 3),
+	# 		ind = FALSE # Do not automatically draw the diagram
+	# 	)
+	# }
+
 
 	return(combination_set_operations)
 } # End of function definition
@@ -137,17 +139,19 @@ compare.vectors <- function(named_list_of_vectors_to_compare){
 # test_example <- compare_vectors(vectors_to_use[1:2])
 # purrr::map(test_example, "elements_involved")
 
-# Get a Venn diagram
-# test_example <- compare_vectors(vectors_to_use[1:2])
-# # Plot the diagram:
-# grid::grid.newpage()
-# grid::grid.draw(test_example[[2]]$venn_diagram)
-
 # Hence, e.g., to find all comparisons that involve "vector_a":
+#test_example[
+# 	sapply(
+# 		purrr::map(combination_set_operations, "elements_involved"),
+# 		function(x){"vector_a" %in% x}
+# 	)
+# ]
+
+# To find all comparisons that were about "vector_a" and "vector_c":
 # test_example[
 # 	sapply(
-# 		purrr::map(test_example, "elements_involved"),
-# 		function(x){"vector_a" %in% x}
+# 		purrr::map(combination_set_operations, "elements_involved"),
+# 		function(x){setequal(x, c("vector_a", "vector_c"))}
 # 	)
 # ]
 
