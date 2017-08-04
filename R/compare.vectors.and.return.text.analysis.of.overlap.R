@@ -51,13 +51,13 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 			#
 			# Print the results of the set operations comparing the elements:
 			#
-			output_markdown <- paste(output_markdown, "\n",  "- **Elements: *", print.vector.with.and(list_element[["elements_involved"]]), "***", sep = "", collapse = "")
+			output_markdown <- paste(output_markdown, "\n\n",  "## **", print.vector.with.and(list_element[["elements_involved"]]), "**", sep = "", collapse = "")
 
-			output_markdown <- paste(output_markdown, "\n",  "\t- Total number of values (not counting duplicates): ", length(list_element[["union_of_elements"]]), sep = "", collapse = "")
+			output_markdown <- paste(output_markdown, "\n",  "- Total number of values (not counting duplicates): ", length(list_element[["union_of_elements"]]), sep = "", collapse = "")
 
 			if(length(list_element[["elements_involved"]]) > 1){ # If it's not just the element compared with itself:
 				output_markdown <- paste(output_markdown, "\n",
-					"\t- Total number of elements that **overlap among ",
+					"- Total number of elements that **overlap among ",
 					print.vector.with.and(list_element[["elements_involved"]]), ":** ",
 					length(list_element[["overlap_of_elements"]]),
 					" (",
@@ -69,7 +69,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 				)
 
 				output_markdown <- paste(output_markdown, "\n",
-					"\t\t- Items that **overlap among ",
+					"\t- Items that **overlap among ",
 					print.vector.with.and(list_element[["elements_involved"]]), ":** *",
 					print.vector.with.and(list_element[["overlap_of_elements"]]),
 					"*",
@@ -77,18 +77,23 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 				)
 
 				for(involved_vector_for_getting_unique_elements in list_element[["elements_involved"]]){
-					output_markdown <- paste(output_markdown, "\n",
-						"\t- Total number of elements that are **unique to ",
+
+					percent_unique_to_involved_vector <- round(length(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]])/length(named_list_of_vectors_to_compare[[involved_vector_for_getting_unique_elements]])*100, 2)
+
+					output_markdown <- paste(output_markdown,
+						"\n\n### Elements Unique to ", involved_vector_for_getting_unique_elements,
+						"\n\nTotal number of elements that are **unique to ",
 						involved_vector_for_getting_unique_elements, ":** ",
 						length(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]]),
 
 						# Get the percentage equivalent:
-						" (", round(length(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]])/length(named_list_of_vectors_to_compare[[involved_vector_for_getting_unique_elements]])*100, 2), "% of ", involved_vector_for_getting_unique_elements, ")",
+						" (", percent_unique_to_involved_vector, "% of ", involved_vector_for_getting_unique_elements, "; put differently, ", 100-percent_unique_to_involved_vector , "% of ", involved_vector_for_getting_unique_elements, " is overlapping)",
 						sep = "", collapse = ""
 					)
 					output_markdown <- paste(output_markdown, "\n",
-						"\t\t- Items that are **unique to ",
-						involved_vector_for_getting_unique_elements, ":** *",
+						"\n\nItems that are **unique to ",
+						involved_vector_for_getting_unique_elements, ":**",
+						"\n\n>*",
 						print.vector.with.and(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]]),
 						"*",
 						sep = "", collapse = ""
