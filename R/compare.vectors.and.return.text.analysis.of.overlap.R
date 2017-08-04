@@ -19,18 +19,6 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 ){
 	output_markdown <- NULL # We'll fill this in below.
 
-	# First, we'll define a sub-function that we'll use below:
-	add_to_output_markdown <- function(..., output_to_append_to = output_markdown){
-		if(exists("output_to_append_to", inherits = FALSE)){ # If we've previously set the variable, we'll use it. Otherwise, we'll set it for the first time.
-			output_to_append_to <<- paste(output_to_append_to, " \
-																", paste(unlist(list(...)), sep = "", collapse = ""), sep = "", collapse = "") # 'list(...)' is how to access the '...' placeholder in the function definition, which stands in for an arbitrary number of arguments. '<<-' breaks out of the confines of the function and writes the varialbe 'output_to_append_to' in the environment one level up from it.
-		} else {
-			output_to_append_to <- paste(paste(unlist(list(...)), sep = ""), sep = "", collapse = "")
-		}
-
-		return(output_to_append_to)
-	}
-
 	vector_names <- names(named_list_of_vectors_to_compare)
 
 	combination_set_operations <- veccompare::compare.vectors(named_list_of_vectors_to_compare)
@@ -46,7 +34,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 	}
 
 	for(n_way_comparison in degrees_of_comparisons){
-		output_markdown <- add_to_output_markdown("\n# ", n_way_comparison, "-Way Comparisons")
+		output_markdown <- paste(output_markdown, "\n# ", n_way_comparison, "-Way Comparisons", sep = "", collapse = "")
 
 		comparisons_at_this_level_of_combination <- combination_set_operations[
 			sapply(
@@ -63,12 +51,12 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 			#
 			# Print the results of the set operations comparing the elements:
 			#
-			output_markdown <- add_to_output_markdown("- **Elements: *", print.vector.with.and(list_element[["elements_involved"]]), "***")
+			output_markdown <- paste(output_markdown, "- **Elements: *", print.vector.with.and(list_element[["elements_involved"]]), "***", sep = "", collapse = "")
 
-			output_markdown <- add_to_output_markdown("\t- Total number of values (not counting duplicates): ", length(list_element[["union_of_elements"]]))
+			output_markdown <- paste(output_markdown, "\t- Total number of values (not counting duplicates): ", length(list_element[["union_of_elements"]]), sep = "", collapse = "")
 
 			if(length(list_element[["elements_involved"]]) > 1){ # If it's not just the element compared with itself:
-				output_markdown <- add_to_output_markdown(
+				output_markdown <- paste(output_markdown,
 					"\t- Total number of elements that **overlap among ",
 					print.vector.with.and(list_element[["elements_involved"]]), ":** ",
 					length(list_element[["overlap_of_elements"]]),
@@ -76,10 +64,11 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 					round(
 						length(list_element$overlap_of_elements)/length(list_element$union_of_elements)*100,
 						digits = 2
-					), "% of the total number of values)"
+					), "% of the total number of values)",
+					sep = "", collapse = ""
 				)
 
-				output_markdown <- add_to_output_markdown(
+				output_markdown <- paste(output_markdown,
 					"\t\t- Items that overlap among ",
 					print.vector.with.and(list_element[["elements_involved"]]), ": *",
 					print.vector.with.and(list_element[["overlap_of_elements"]]),
@@ -87,7 +76,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 				)
 
 				for(involved_vector_for_getting_unique_elements in list_element[["elements_involved"]]){
-					output_markdown <- add_to_output_markdown(
+					output_markdown <- paste(output_markdown,
 						"\t- Total number of elements that are **unique to ",
 						involved_vector_for_getting_unique_elements, ":** ",
 						length(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]]),
@@ -95,11 +84,12 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 						# Get the percentage equivalent:
 						" (", round(length(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]])/length(named_list_of_vectors_to_compare[[involved_vector_for_getting_unique_elements]])*100, 2), "% of ", involved_vector_for_getting_unique_elements, ")"
 					)
-					output_markdown <- add_to_output_markdown(
+					output_markdown <- paste(output_markdown,
 						"\t\t- Items that are unique to ",
 						involved_vector_for_getting_unique_elements, ": *",
 						print.vector.with.and(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]]),
-						"*"
+						"*",
+						sep = "", collapse = ""
 					)
 				} # End of if statement re: unique elements
 			} # End of if statement re: length of elements involved.
