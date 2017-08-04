@@ -1,0 +1,15 @@
+Package: veccompare
+Type: Package
+Title: Perform Set Operations on Vectors, Automatically Generating All n-Wise Comparisons, and Create Markdown Output Automatically
+Version: 0.1.0
+Author: Jacob Levernier <jlevern@upenn.edu>
+Maintainer: Jacob Levernier <jlevern@upenn.edu>
+Description: This package contains functions for automating set operations (i.e., comparisons of overlap) between multiple vectors.
+    It also contains a function for automating reporting in RMarkdown, by generating markdown output for easy analysis.
+License: All Rights Reserved
+Encoding: UTF-8
+LazyData: true
+Imports:
+    gtools,
+    purrr,
+    VennDiagram
