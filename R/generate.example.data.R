@@ -4,7 +4,8 @@
 # 	"vector_a" = c("a", "b", "c", "d", "z", "q", "x"),
 # 	"vector_b" = c("a", "a", "b", "e", "f", "z"),
 # 	"vector_c" = c("b", "f", "g", "h", "i"),
-# 	"vector_d" = c("c", "i", "b", "k", "l")
+# 	"vector_d" = c("c", "i", "b", "k", "l"),
+# 	"vector_e" = c("a", "g", "h", "k", "i")
 # )
 #
-# devtools::use_data(example.vectors.list)
+# devtools::use_data(example.vectors.list, overwrite = TRUE)
