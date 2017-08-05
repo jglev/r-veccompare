@@ -16,13 +16,24 @@
 compare.vectors.and.return.text.analysis.of.overlap <- function(
 	named_list_of_vectors_to_compare,
 	degrees_of_comparison_to_include = NULL, # By default, all degrees of comparison will be included (e.g., for three vectors, all 1-, 2-, and 3-way comparisons). If you only want to include 2- and 3-way comparisons, for example, you can use 'c(2, 3)' here.
-	print_immediately = FALSE # Whether to immediately print to the console using cat(). This needs to be true if venn diagrams are to be drawn.
+	cat_immediately = FALSE, # Whether to immediately print to the console using cat(). This needs to be true if venn diagrams are to be drawn.
+	draw_venn_diagrams = FALSE # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
 ){
+	if(draw_venn_diagrams == TRUE){ # Sanitize the user input
+		draw_venn_diagrams_value <- TRUE
+	} else {
+		draw_venn_diagrams_value <- FALSE
+	}
+
+	if(draw_venn_diagrams_value == TRUE & cat_immediately != TRUE){
+			warning("'draw_venn_diagrams' is TRUE, but 'cat_immediately' is FALSE. 'cat_immediately' needs to be set to TRUE in order for Venn diagrams to be drawn in the output. Therefore, skipping drawing diagrams...")
+	}
+
 	output_markdown <- NULL # We'll fill this in below.
 
 	vector_names <- names(named_list_of_vectors_to_compare)
 
-	combination_set_operations <- veccompare::compare.vectors(named_list_of_vectors_to_compare)
+	combination_set_operations <- veccompare::compare.vectors(named_list_of_vectors_to_compare, draw_venn_diagrams = draw_venn_diagrams_value)
 
 	if(is.null(degrees_of_comparison_to_include)){ # If we *have not* been told which comparisons (e.g., 2-way, 3-way, etc.) to include, we'll use all of them by default:
 		degrees_of_comparisons <- 1:length(vector_names)
@@ -38,7 +49,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 
 		addition_to_output_markdown <- paste("\n",  "\n# ", n_way_comparison, "-Way Comparisons", sep = "", collapse = "")
 
-		if(print_immediately == TRUE){
+		if(cat_immediately == TRUE){
 			cat(addition_to_output_markdown)
 		} else {
 			output_markdown <- paste(output_markdown, addition_to_output_markdown, sep = "", collapse = "")
@@ -61,14 +72,14 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 			#
 			addition_to_output_markdown <- paste("\n\n",  "## **", print.vector.with.and(list_element[["elements_involved"]]), "**", sep = "", collapse = "")
 
-			if(print_immediately == TRUE){
+			if(cat_immediately == TRUE){
 				cat(addition_to_output_markdown)
 			} else {
 				output_markdown <- paste(output_markdown, addition_to_output_markdown, sep = "", collapse = "")
 			}
 
 			# If we have a venn diagram to draw, go ahead and draw it:
-			if(print_immediately == TRUE){
+			if(draw_venn_diagrams == TRUE & cat_immediately == TRUE){ # Note that we give the user a warning above if draw_venn_diagrams is TRUE but cat_immediately is FALSE
 				if(!is.null(list_element[["venn_diagram"]])){
 					cat("\n\n")
 					veccompare::render.venn.diagram(list_element[["venn_diagram"]])
@@ -78,7 +89,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 
 			addition_to_output_markdown <- paste("\n",  "- Total number of values (not counting duplicates): ", length(list_element[["union_of_elements"]]), sep = "", collapse = "")
 
-			if(print_immediately == TRUE){
+			if(cat_immediately == TRUE){
 				cat(addition_to_output_markdown)
 			} else {
 				output_markdown <- paste(output_markdown, addition_to_output_markdown, sep = "", collapse = "")
@@ -97,7 +108,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 					sep = "", collapse = ""
 				)
 
-				if(print_immediately == TRUE){
+				if(cat_immediately == TRUE){
 					cat(addition_to_output_markdown)
 				} else {
 					output_markdown <- paste(output_markdown, addition_to_output_markdown, sep = "", collapse = "")
@@ -111,7 +122,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 					sep = "", collapse = ""
 				)
 
-				if(print_immediately == TRUE){
+				if(cat_immediately == TRUE){
 					cat(addition_to_output_markdown)
 				} else {
 					output_markdown <- paste(output_markdown, addition_to_output_markdown, sep = "", collapse = "")
@@ -132,7 +143,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 						sep = "", collapse = ""
 					)
 
-					if(print_immediately == TRUE){
+					if(cat_immediately == TRUE){
 						cat(addition_to_output_markdown)
 					} else {
 						output_markdown <- paste(output_markdown, addition_to_output_markdown, sep = "", collapse = "")
@@ -147,7 +158,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 						sep = "", collapse = ""
 					)
 
-					if(print_immediately == TRUE){
+					if(cat_immediately == TRUE){
 						cat(addition_to_output_markdown)
 					} else {
 						output_markdown <- paste(output_markdown, addition_to_output_markdown, sep = "", collapse = "")

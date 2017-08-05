@@ -13,7 +13,10 @@
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
 
-compare.vectors <- function(named_list_of_vectors_to_compare){
+compare.vectors <- function(
+	named_list_of_vectors_to_compare,
+	draw_venn_diagrams = FALSE # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
+){
 	vector_names <- names(named_list_of_vectors_to_compare)
 
 	combinations_of_vector_names <- as.data.frame(
