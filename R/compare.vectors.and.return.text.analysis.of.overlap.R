@@ -53,6 +53,11 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 			#
 			output_markdown <- paste(output_markdown, "\n\n",  "## **", print.vector.with.and(list_element[["elements_involved"]]), "**", sep = "", collapse = "")
 
+			# If we have a venn diagram to draw, go ahead and draw it:
+			if(!is.null(list_element[["venn_diagram"]])){
+				veccompare::render.venn.diagram(list_element[["venn_diagram"]])
+			}
+
 			output_markdown <- paste(output_markdown, "\n",  "- Total number of values (not counting duplicates): ", length(list_element[["union_of_elements"]]), sep = "", collapse = "")
 
 			if(length(list_element[["elements_involved"]]) > 1){ # If it's not just the element compared with itself:
