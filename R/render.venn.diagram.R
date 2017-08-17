@@ -13,7 +13,14 @@
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
 
-render.venn.diagram <- function(venn_diagram_created_with_VennDiagram_package){
+render.venn.diagram <- function(
+	venn_diagram_created_with_VennDiagram_package,
+	viewport_npc_width_height_to_force = 1.0
+){
 	grid::grid.newpage()
+	grid::pushViewport(grid::viewport(
+		width = grid::unit(viewport_npc_width_height_to_force, "npc"),
+		height = grid::unit(viewport_npc_width_height_to_force, "npc")
+	)); # Following https://stackoverflow.com/questions/21234439/how-to-force-the-labels-to-fit-in-venndiagram#comment75690400_22826211, force the output rendering mechanism to be smaller than normal, in order not to cut off diagram names.
 	grid::grid.draw(venn_diagram_created_with_VennDiagram_package)
 }

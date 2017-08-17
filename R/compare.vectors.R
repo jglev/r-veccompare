@@ -57,7 +57,12 @@ compare.vectors <- function(
 			# print(row[1])
 
 			unique_names_in_row <- as.character(unique(row))
-			vector_items_for_unique_names_in_row <- named_list_of_vectors_to_compare[unique_names_in_row]
+
+			if(nrow(combinations_of_vector_names_chunked_for_unique_items) == 1){
+				vector_items_for_unique_names_in_row <- lapply(named_list_of_vectors_to_compare[unique_names_in_row], unique)
+			} else {
+				vector_items_for_unique_names_in_row <- named_list_of_vectors_to_compare[unique_names_in_row]
+			}
 
 			# Run setdiff() on with each element being first in turn (since setdiff gives the unique items for whichever item is printed first)
 			list_of_elements_unique_to_vectors = list() # We'll fill this in below.
@@ -113,7 +118,10 @@ compare.vectors <- function(
 	maximum_degree_of_comparison_calculated <- length(named_list_of_vectors_to_compare)
 
 	if(maximum_degree_of_comparison_calculated >= 2){
-		for(degree_of_comparison in 2:maximum_degree_of_comparison_calculated){
+		if(maximum_degree_of_comparison_calculated >= 6){
+			message("Note: We can only draw up to 5-way diagrams. Thus, combinations of greater than 5 degrees (i.e., 6+ - way comparisons) will not be drawn...")
+		}
+		for(degree_of_comparison in 2:(min(maximum_degree_of_comparison_calculated, 5))){ # The Venn Diagram package can only draw up to 5-way comparisons, so we won't go above 5 when drawing Venn-Diagrams.
 
 			message("Calculating Venn diagram for all ", degree_of_comparison, "-way comparisons...", sep = "")
 
@@ -261,7 +269,7 @@ compare.vectors <- function(
 } # End of function definition
 
 # Test the function:
-# compare_vectors(vectors_to_use)
+# test<- veccompare::compare.vectors(veccompare::example.vectors.list)
 
 # If we want to get similar elements across list items, we can do so with the purrr package, as an example:
 # library('purrr')

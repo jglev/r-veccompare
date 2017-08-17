@@ -17,10 +17,15 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 	named_list_of_vectors_to_compare,
 	degrees_of_comparison_to_include = NULL, # By default, all degrees of comparison will be included (e.g., for three vectors, all 1-, 2-, and 3-way comparisons). If you only want to include 2- and 3-way comparisons, for example, you can use 'c(2, 3)' here.
 	cat_immediately = FALSE, # Whether to immediately print to the console using cat(). This needs to be true if venn diagrams are to be drawn.
-	draw_venn_diagrams = FALSE # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
+	draw_venn_diagrams = FALSE, # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
+	viewport_npc_width_height_for_venn_diagrams = 1.0
 ){
 	if(draw_venn_diagrams == TRUE){ # Sanitize the user input
 		draw_venn_diagrams_value <- TRUE
+
+		if(!is.numeric(viewport_npc_width_height_for_venn_diagrams)){
+			stop("'viewport_npc_width_height_for_venn_diagrams' is expected to be numeric (e.g., 1.0, 0.5, etc.).")
+		}
 	} else {
 		draw_venn_diagrams_value <- FALSE
 	}
@@ -44,6 +49,8 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 			degrees_of_comparisons <- degrees_of_comparison_to_include
 		}
 	}
+
+	message("Creating output Markdown text...")
 
 	for(n_way_comparison in degrees_of_comparisons){
 
@@ -70,7 +77,16 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 			#
 			# Print the results of the set operations comparing the elements:
 			#
-			addition_to_output_markdown <- paste("\n\n",  "## **", print.vector.with.and(list_element[["elements_involved"]]), "**", sep = "", collapse = "")
+			addition_to_output_markdown <- paste(
+				"\n\n",
+				"## **",
+				print.vector.with.and(
+					list_element[["elements_involved"]],
+					string_to_return_if_vector_is_empty = "(None)"),
+				"**",
+				sep = "",
+				collapse = ""
+			)
 
 			if(cat_immediately == TRUE){
 				cat(addition_to_output_markdown)
@@ -82,12 +98,15 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 			if(draw_venn_diagrams == TRUE & cat_immediately == TRUE){ # Note that we give the user a warning above if draw_venn_diagrams is TRUE but cat_immediately is FALSE
 				if(!is.null(list_element[["venn_diagram"]])){
 					cat("\n\n")
-					veccompare::render.venn.diagram(list_element[["venn_diagram"]])
+					veccompare::render.venn.diagram(
+						list_element[["venn_diagram"]],
+						viewport_npc_width_height_to_force = viewport_npc_width_height_for_venn_diagrams
+					)
 					cat("\n\n")
 				}
 			}
 
-			addition_to_output_markdown <- paste("\n",  "- Total number of values (not counting duplicates): ", length(list_element[["union_of_elements"]]), sep = "", collapse = "")
+			addition_to_output_markdown <- paste("\n",  "- Total number of values (not counting duplicates): ", length(unique(list_element[["union_of_elements"]])), sep = "", collapse = "") # unique() is needed here just for when the total number of elements is 1 (i.e., we're just reporting on the number of elements) -- in that case, this is necessary to count only non-duplicate values (without this, venn diagrams in higher-level comparisons won't add up with the values in the level-1 comparisons (i.e., with the number of elements printed for each vector individually).
 
 			if(cat_immediately == TRUE){
 				cat(addition_to_output_markdown)
@@ -117,7 +136,10 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 				addition_to_output_markdown <- paste("\n",
 					"\t- Items that **overlap among ",
 					print.vector.with.and(list_element[["elements_involved"]]), ":** *",
-					print.vector.with.and(list_element[["overlap_of_elements"]]),
+					print.vector.with.and(
+						list_element[["overlap_of_elements"]],
+						string_to_return_if_vector_is_empty = "(None)"
+					),
 					"*",
 					sep = "", collapse = ""
 				)
@@ -153,7 +175,10 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 						"\n\nItems that are **unique to ",
 						involved_vector_for_getting_unique_elements, ":**",
 						"\n\n>*",
-						print.vector.with.and(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]]),
+						print.vector.with.and(
+							list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]],
+							string_to_return_if_vector_is_empty = "(None)"
+						),
 						"*",
 						sep = "", collapse = ""
 					)

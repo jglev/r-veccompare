@@ -13,8 +13,13 @@
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
 
-print.vector.with.and <- function(vector_to_print){
-	if(length(vector_to_print) == 1){
+print.vector.with.and <- function(
+	vector_to_print,
+	string_to_return_if_vector_is_empty = ""
+){
+	if(length(vector_to_print) == 0){
+		return(string_to_return_if_vector_is_empty)
+	} else if(length(vector_to_print) == 1){
 		return(vector_to_print)
 	} else if(length(vector_to_print) == 2){
 		return(paste(vector_to_print, sep = " and ", collapse = " and "))
@@ -35,3 +40,10 @@ print.vector.with.and <- function(vector_to_print){
 		)
 	}
 }
+
+# Test the function:
+print.vector.with.and(c("One", "Two", "Three", "Four"))
+print.vector.with.and(c("One", "Two"))
+print.vector.with.and(c("One"))
+print.vector.with.and(c(""))
+print.vector.with.and(c())

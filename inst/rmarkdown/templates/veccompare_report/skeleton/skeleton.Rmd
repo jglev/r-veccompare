@@ -1,0 +1,97 @@
+---
+title: "Untitled"
+author: "Author Name"
+date: "January 1, 1970"
+output: pdf_document
+---
+
+```{r setup, echo = FALSE, eval = TRUE}
+# Set the default code chunk options for this document:
+knitr::opts_chunk$set(echo = FALSE) # Don't print code itself.
+knitr::opts_chunk$set(message = FALSE) # Don't print output messages.
+knitr::opts_chunk$set(include = TRUE) # Do run code chunks.
+knitr::opts_chunk$set(fig.width = 8) # Set the default image width wide enough so that it doesn't get cut off.
+knitr::opts_chunk$set(dev = 'pdf') # Set the default image writer to PDF
+options(digits=2) # Use two decimal places by default.
+knitr::opts_chunk$set(cache = FALSE)
+```
+
+```{r define_sample_data, eval = TRUE}
+vectors_to_use <- veccompare::example.vectors.list
+```
+
+```{r define_function_for_comparing_vectors, eval = FALSE}
+# Test the function:
+# veccompare::compare.vectors(vectors_to_use)
+
+# If we want to get similar elements across list items, we can do so with the purrr package, as an example:
+# library('purrr')
+# test_example <- veccompare::compare.vectors(vectors_to_use[1:2])
+# purrr::map(test_example, "elements_involved")
+
+# Get a Venn diagram
+# test_example <- veccompare::compare.vectors(vectors_to_use[1:2])
+# # Plot the diagram:
+# grid::grid.newpage()
+# grid::grid.draw(test_example[[2]]$venn_diagram)
+
+# Hence, e.g., to find all comparisons that involve "vector_a":
+# test_example[
+# 	sapply(
+# 		purrr::map(test_example, "elements_involved"),
+# 		function(x){"vector_a" %in% x}
+# 	)
+# ]
+
+# Or, to get all elements that did a two-way comparison:
+# test_example[
+# 	sapply(
+# 		purrr::map(test_example, "elements_involved"),
+# 		function(x){length(x) == 2}
+# 	)
+# ]
+```
+
+```{r print_output, results = "asis", eval = FALSE}
+cat(veccompare::compare.vectors.and.return.text.analysis.of.overlap(
+	vectors_to_use[1:4]
+	# , degrees_of_comparison_to_include = c(1, 3)
+	# , draw_venn_diagram = TRUE
+))
+```
+
+
+```{r print_report, results = "asis", fig.width=8, fig.height=6, fig.align="center", eval = TRUE}
+veccompare::compare.vectors.and.return.text.analysis.of.overlap(
+	veccompare::example.vectors.list,
+	cat_immediately = TRUE,
+	draw_venn_diagrams = TRUE,
+	viewport_npc_width_height_for_venn_diagrams = 1.0 # If venn diagrams are getting cut off, this number can be lowered (e.g., to 0.7)
+)
+```
+
+```{r test_with_venn_diagrams, eval = FALSE}
+test_example <- veccompare::compare.vectors(
+	list(
+		"Psalter World map" = unique(dataset_edge_list[dataset_edge_list$to == "psalter_world_map_normalized_reading", "from"]),
+		"Psalter List map" = unique(dataset_edge_list[dataset_edge_list$to == "psalter_list_map_normalized_reading", "from"]),
+		"HSV Dalché map" = unique(dataset_edge_list[dataset_edge_list$to == "hsv_dalché_normalized_reading", "from"]),
+		"Lambert map" = unique(dataset_edge_list[dataset_edge_list$to == "lambert_normalized_reading", "from"]),
+		"Isidore/Munich map" = unique(dataset_edge_list[dataset_edge_list$to == "munich_normalized_reading..munich.clm.10058.f..154v.", "from"])
+	)
+	, draw_venn_diagrams = TRUE
+)
+
+diagram <- test_example[[
+	which(
+		sapply(
+			purrr::map(test_example, "elements_involved"),
+			function(x){length(x) == 3}
+		)
+	)[3]
+]]$venn_diagram
+
+veccompare::render.venn.diagram(diagram)
+```
+
+
