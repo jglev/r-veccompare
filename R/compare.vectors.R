@@ -170,7 +170,7 @@ compare.vectors <- function(
 						n123 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
 						category = names_of_elements_in_this_comparison_set,
 						#lty = rep("blank", 3), # Line dash pattern of the circles
-						fill = generate_random_colors(3),
+						fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
 						alpha = rep(0.5, 3),
 						cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
 						cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
@@ -199,7 +199,7 @@ compare.vectors <- function(
 						n1234 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
 						category = names_of_elements_in_this_comparison_set,
 						# lty = rep("blank", 4), # Line dash pattern of the circles
-						fill = generate_random_colors(4),
+						fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
 						alpha = rep(0.5, 4),
 						#cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
 						#cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
@@ -244,7 +244,7 @@ compare.vectors <- function(
 						n12345 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
 						category = names_of_elements_in_this_comparison_set,
 						# lty = rep("blank", 5), # Line dash pattern of the circles
-						fill = generate_random_colors(5),
+						fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
 						alpha = rep(0.5, 5),
 						#cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
 						#cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
