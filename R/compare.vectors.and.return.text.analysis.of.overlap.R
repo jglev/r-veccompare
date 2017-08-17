@@ -152,7 +152,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 
 				for(involved_vector_for_getting_unique_elements in list_element[["elements_involved"]]){
 
-					percent_unique_to_involved_vector <- round(length(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]])/length(named_list_of_vectors_to_compare[[involved_vector_for_getting_unique_elements]])*100, 2)
+					percent_unique_to_involved_vector <- round(length(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]])/length(unique(named_list_of_vectors_to_compare[[involved_vector_for_getting_unique_elements]]))*100, 2)
 
 					addition_to_output_markdown <- paste(
 						"\n\n### Elements Unique to ", involved_vector_for_getting_unique_elements,
