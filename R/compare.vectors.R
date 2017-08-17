@@ -19,6 +19,10 @@ compare.vectors <- function(
 ){
 	vector_names <- names(named_list_of_vectors_to_compare)
 
+	# If we're generating Venn diagrams, we'll create a consistent color to use for each vector:
+	vector_colors <- as.list(generate_random_colors(length(vector_names)))
+	names(vector_colors) <- vector_names
+
 	combinations_of_vector_names <- as.data.frame(
 		gtools::combinations(
 			length(vector_names), # size of the source vector
@@ -145,7 +149,7 @@ compare.vectors <- function(
 						cross.area = length(combination_set_operations[[combination_set_element_number]]$overlap_of_elements),
 						category = names_of_elements_in_this_comparison_set,
 						# lty = rep("blank", 2), # Line dash pattern of the circles
-						fill = generate_random_colors(2),
+						fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
 						alpha = rep(0.5, 2),
 						cat.pos = rep(0, 2), # Category position around the circles (in degrees)
 						cat.dist = rep(0.025, 2), # Category names' distances from the edges of the circles (can be negative)
@@ -269,7 +273,13 @@ compare.vectors <- function(
 } # End of function definition
 
 # Test the function:
-# test<- veccompare::compare.vectors(veccompare::example.vectors.list)
+# test <- veccompare::compare.vectors(veccompare::example.vectors.list)
+
+# for(venndiagram in purrr::map(test, "venn_diagram")){
+#
+# }
+
+
 
 # If we want to get similar elements across list items, we can do so with the purrr package, as an example:
 # library('purrr')
