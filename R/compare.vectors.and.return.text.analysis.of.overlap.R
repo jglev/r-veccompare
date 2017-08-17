@@ -19,10 +19,17 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 	cat_immediately = FALSE, # Whether to immediately print to the console using cat(). This needs to be true if venn diagrams are to be drawn.
 	draw_venn_diagrams = FALSE, # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
 	viewport_npc_width_height_for_venn_diagrams = 1.0,
-	vector_colors_for_venn_diagrams = NULL
+	vector_colors_for_venn_diagrams = NULL,
+	save_venn_diagram_files = FALSE
 ){
 	if(draw_venn_diagrams == TRUE){ # Sanitize the user input
 		draw_venn_diagrams_value <- TRUE
+
+		if(save_venn_diagram_files == TRUE){ # Sanitize the user input
+			save_venn_diagram_files_value <- TRUE
+		} else {
+			save_venn_diagram_files_value <- FALSE
+		}
 
 		if(!is.null(vector_colors_for_venn_diagrams)){ # Sanitize the user input
 			message("Using the following Venn diagram colors: ", veccompare::print.vector.with.and(vector_colors_for_venn_diagrams))
@@ -50,7 +57,8 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 	combination_set_operations <- veccompare::compare.vectors(
 		named_list_of_vectors_to_compare,
 		draw_venn_diagrams = draw_venn_diagrams_value,
-		vector_colors_for_venn_diagrams = vector_colors_for_venn_diagrams_value
+		vector_colors_for_venn_diagrams = vector_colors_for_venn_diagrams_value,
+		save_venn_diagram_files = save_venn_diagram_files_value
 	)
 
 	if(is.null(degrees_of_comparison_to_include)){ # If we *have not* been told which comparisons (e.g., 2-way, 3-way, etc.) to include, we'll use all of them by default:

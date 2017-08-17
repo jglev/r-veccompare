@@ -16,7 +16,8 @@
 compare.vectors <- function(
 	named_list_of_vectors_to_compare,
 	draw_venn_diagrams = FALSE, # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
-	vector_colors_for_venn_diagrams = NULL
+	vector_colors_for_venn_diagrams = NULL,
+	save_venn_diagram_files = FALSE
 ){
 	vector_names <- names(named_list_of_vectors_to_compare)
 
@@ -109,167 +110,184 @@ compare.vectors <- function(
 	# -------------------------------------------------
 	# Draw Venn diagrams
 	# -------------------------------------------------
-	# We will now create Venn diagrams for each level of comparison (e.g., 2-way, 3-way, etc.), from 2 to the maximum level of comparison (up to 5-way, since that's the most that the VennDiagram package I'm using can draw):
+	if(draw_venn_diagrams == TRUE){
+		# We will now create Venn diagrams for each level of comparison (e.g., 2-way, 3-way, etc.), from 2 to the maximum level of comparison (up to 5-way, since that's the most that the VennDiagram package I'm using can draw):
 
-	# Define a sub-function to make it easier to query overlaps between elements
-	get_overlap_of_elements_from_combination_set_operations <- function(
-		... # This should be a list of element names. "..." is R's way of accepting an arbitrary number of arguments.
-	){
-		element_names <- unlist(list(...)) # Parse the "..." arbitrary number of arguments into a vector.
+		# Define a sub-function to make it easier to query overlaps between elements
+		get_overlap_of_elements_from_combination_set_operations <- function(
+			... # This should be a list of element names. "..." is R's way of accepting an arbitrary number of arguments.
+		){
+			element_names <- unlist(list(...)) # Parse the "..." arbitrary number of arguments into a vector.
 
-		overlap_value <- length(
-			combination_set_operations[[ # sapply() below should only bring back one matching element, since above we made sure we weren't calculating repeats, so this (just assuming that there will only be one matching element) seems safe to do.
-				which(
+			overlap_value <- length(
+				combination_set_operations[[ # sapply() below should only bring back one matching element, since above we made sure we weren't calculating repeats, so this (just assuming that there will only be one matching element) seems safe to do.
+					which(
+						sapply(
+							purrr::map(combination_set_operations, "elements_involved"),
+							function(x){setequal(x, c(element_names))}
+						)
+					)
+					]]$overlap_of_elements
+			)
+			return(overlap_value)
+		} # End of sub-function definition
+
+		maximum_degree_of_comparison_calculated <- length(named_list_of_vectors_to_compare)
+
+		if(maximum_degree_of_comparison_calculated >= 2){
+			if(maximum_degree_of_comparison_calculated >= 6){
+				message("Note: We can only draw up to 5-way diagrams. Thus, combinations of greater than 5 degrees (i.e., 6+ - way comparisons) will not be drawn...")
+			}
+			for(degree_of_comparison in 2:(min(maximum_degree_of_comparison_calculated, 5))){ # The Venn Diagram package can only draw up to 5-way comparisons, so we won't go above 5 when drawing Venn-Diagrams.
+
+				message("Calculating Venn diagram for all ", degree_of_comparison, "-way comparisons...", sep = "")
+
+				combination_set_elements_relevant_for_current_degree_of_comparison <- which(
 					sapply(
 						purrr::map(combination_set_operations, "elements_involved"),
-						function(x){setequal(x, c(element_names))}
+						function(x) {length(x) == degree_of_comparison}
 					)
 				)
-				]]$overlap_of_elements
-		)
-		return(overlap_value)
-	} # End of sub-function definition
 
-	maximum_degree_of_comparison_calculated <- length(named_list_of_vectors_to_compare)
+				for(combination_set_element_number in combination_set_elements_relevant_for_current_degree_of_comparison){
 
-	if(maximum_degree_of_comparison_calculated >= 2){
-		if(maximum_degree_of_comparison_calculated >= 6){
-			message("Note: We can only draw up to 5-way diagrams. Thus, combinations of greater than 5 degrees (i.e., 6+ - way comparisons) will not be drawn...")
-		}
-		for(degree_of_comparison in 2:(min(maximum_degree_of_comparison_calculated, 5))){ # The Venn Diagram package can only draw up to 5-way comparisons, so we won't go above 5 when drawing Venn-Diagrams.
+					names_of_elements_in_this_comparison_set <- combination_set_operations[[combination_set_element_number]]$elements_involved
 
-			message("Calculating Venn diagram for all ", degree_of_comparison, "-way comparisons...", sep = "")
+					message("Drawing comparison between ", veccompare::print.vector.with.and(names_of_elements_in_this_comparison_set), "...", sep = "")
 
-			combination_set_elements_relevant_for_current_degree_of_comparison <- which(
-				sapply(
-					purrr::map(combination_set_operations, "elements_involved"),
-					function(x) {length(x) == degree_of_comparison}
-				)
-			)
+					if(length(names_of_elements_in_this_comparison_set) == 2){
+						venn_diagram <- VennDiagram::draw.pairwise.venn(
+							area1 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[1]]])),
+							area2 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[2]]])),
+							cross.area = length(combination_set_operations[[combination_set_element_number]]$overlap_of_elements),
+							category = names_of_elements_in_this_comparison_set,
+							# lty = rep("blank", 2), # Line dash pattern of the circles
+							fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
+							alpha = rep(0.5, 2),
+							cat.pos = rep(0, 2), # Category position around the circles (in degrees)
+							cat.dist = rep(0.025, 2), # Category names' distances from the edges of the circles (can be negative)
+							scaled = TRUE,
+							margin = 0,
+							cex = rep(1.5, 3),
+							cat.cex = rep(1.5, 2),
+							ind = FALSE # Do not automatically draw the diagram
+						)
+					} else if(length(names_of_elements_in_this_comparison_set) == 3){
+						venn_diagram <- VennDiagram::draw.triple.venn(
+							area1 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[1]]])),
+							area2 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[2]]])),
+							area3 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[3]]])),
+							n12 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2]),
+							n23 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
+							n13 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3]),
+							n123 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
+							category = names_of_elements_in_this_comparison_set,
+							#lty = rep("blank", 3), # Line dash pattern of the circles
+							fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
+							alpha = rep(0.5, 3),
+							cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
+							cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
+							scaled = TRUE,
+							margin = 0,
+							cex = rep(1.5, 7),
+							cat.cex = rep(1.5, 3),
+							ind = FALSE # Do not automatically draw the diagram
+						)
+					} else if(length(names_of_elements_in_this_comparison_set) == 4){
+						venn_diagram <- VennDiagram::draw.quad.venn(
+							area1 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[1]]])),
+							area2 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[2]]])),
+							area3 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[3]]])),
+							area4 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[4]]])),
+							n12 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2]),
+							n13 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3]),
+							n14 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[4]),
+							n23 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
+							n24 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[4]),
+							n34 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
+							n123 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
+							n124 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[4]),
+							n134 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
+							n234 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
+							n1234 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
+							category = names_of_elements_in_this_comparison_set,
+							# lty = rep("blank", 4), # Line dash pattern of the circles
+							fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
+							alpha = rep(0.5, 4),
+							#cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
+							#cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
+							scaled = TRUE,
+							margin = 0,
+							cex = rep(1.5, 15),
+							cat.cex = rep(1.5, 4),
+							ind = FALSE # Do not automatically draw the diagram
+						)
+					} else if(length(names_of_elements_in_this_comparison_set) == 5){
+						venn_diagram <- VennDiagram::draw.quintuple.venn(
+							area1 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[1]]])),
+							area2 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[2]]])),
+							area3 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[3]]])),
+							area4 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[4]]])),
+							area5 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[5]]])),
+							n12 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2]),
+							n13 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3]),
+							n14 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[4]),
+							n15 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[5]),
+							n23 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
+							n24 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[4]),
+							n25 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[5]),
+							n34 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
+							n35 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[5]),
+							n45 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
+							n123 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
+							n124 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[4]),
+							n125 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[5]),
+							n134 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
+							n135 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[5]),
+							n145 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
+							n234 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
+							n235 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[5]),
+							n245 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
+							n345 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
+							n1234 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
+							n1235 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[5]),
+							n1245 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
+							n1345 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
+							n2345 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
+							n12345 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
+							category = names_of_elements_in_this_comparison_set,
+							# lty = rep("blank", 5), # Line dash pattern of the circles
+							fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
+							alpha = rep(0.5, 5),
+							#cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
+							#cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
+							scaled = TRUE,
+							margin = 0,
+							cex = rep(1.5, 31),
+							cat.cex = rep(1.5, 5),
+							ind = FALSE # Do not automatically draw the diagram
+						)
+					} # End of if statement over length of elements
 
-			for(combination_set_element_number in combination_set_elements_relevant_for_current_degree_of_comparison){
+					combination_set_operations[[combination_set_element_number]]$venn_diagram <- venn_diagram
 
-				names_of_elements_in_this_comparison_set <- combination_set_operations[[combination_set_element_number]]$elements_involved
+					if(save_venn_diagram_files == TRUE){
+						filename_to_use <- make.names(
+							paste(
+								paste(combination_set_operations[[combination_set_element_number]]$elements_involved, sep = "_", collapse = "_"),
+								"_venn_diagram.png",
+								sep = "",
+								collapse = ""
+							)
+						)
 
-				message("Drawing comparison between ", veccompare::print.vector.with.and(names_of_elements_in_this_comparison_set), "...", sep = "")
+						message("Saving Venn diagram to '", file.path(getwd(), filename_to_use), "'...")
 
-				if(length(names_of_elements_in_this_comparison_set) == 2){
-					venn_diagram <- VennDiagram::draw.pairwise.venn(
-						area1 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[1]]])),
-						area2 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[2]]])),
-						cross.area = length(combination_set_operations[[combination_set_element_number]]$overlap_of_elements),
-						category = names_of_elements_in_this_comparison_set,
-						# lty = rep("blank", 2), # Line dash pattern of the circles
-						fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
-						alpha = rep(0.5, 2),
-						cat.pos = rep(0, 2), # Category position around the circles (in degrees)
-						cat.dist = rep(0.025, 2), # Category names' distances from the edges of the circles (can be negative)
-						scaled = TRUE,
-						margin = 0,
-						cex = rep(1.5, 3),
-						cat.cex = rep(1.5, 2),
-						ind = FALSE # Do not automatically draw the diagram
-					)
-				} else if(length(names_of_elements_in_this_comparison_set) == 3){
-					venn_diagram <- VennDiagram::draw.triple.venn(
-						area1 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[1]]])),
-						area2 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[2]]])),
-						area3 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[3]]])),
-						n12 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2]),
-						n23 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
-						n13 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3]),
-						n123 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
-						category = names_of_elements_in_this_comparison_set,
-						#lty = rep("blank", 3), # Line dash pattern of the circles
-						fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
-						alpha = rep(0.5, 3),
-						cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
-						cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
-						scaled = TRUE,
-						margin = 0,
-						cex = rep(1.5, 7),
-						cat.cex = rep(1.5, 3),
-						ind = FALSE # Do not automatically draw the diagram
-					)
-				} else if(length(names_of_elements_in_this_comparison_set) == 4){
-					venn_diagram <- VennDiagram::draw.quad.venn(
-						area1 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[1]]])),
-						area2 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[2]]])),
-						area3 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[3]]])),
-						area4 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[4]]])),
-						n12 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2]),
-						n13 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3]),
-						n14 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[4]),
-						n23 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
-						n24 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[4]),
-						n34 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
-						n123 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
-						n124 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[4]),
-						n134 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
-						n234 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
-						n1234 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
-						category = names_of_elements_in_this_comparison_set,
-						# lty = rep("blank", 4), # Line dash pattern of the circles
-						fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
-						alpha = rep(0.5, 4),
-						#cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
-						#cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
-						scaled = TRUE,
-						margin = 0,
-						cex = rep(1.5, 15),
-						cat.cex = rep(1.5, 4),
-						ind = FALSE # Do not automatically draw the diagram
-					)
-				} else if(length(names_of_elements_in_this_comparison_set) == 5){
-					venn_diagram <- VennDiagram::draw.quintuple.venn(
-						area1 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[1]]])),
-						area2 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[2]]])),
-						area3 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[3]]])),
-						area4 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[4]]])),
-						area5 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[5]]])),
-						n12 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2]),
-						n13 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3]),
-						n14 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[4]),
-						n15 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[5]),
-						n23 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
-						n24 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[4]),
-						n25 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[5]),
-						n34 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
-						n35 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[5]),
-						n45 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
-						n123 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
-						n124 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[4]),
-						n125 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[5]),
-						n134 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
-						n135 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[5]),
-						n145 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
-						n234 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
-						n235 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[5]),
-						n245 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
-						n345 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
-						n1234 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
-						n1235 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[5]),
-						n1245 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
-						n1345 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
-						n2345 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
-						n12345 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
-						category = names_of_elements_in_this_comparison_set,
-						# lty = rep("blank", 5), # Line dash pattern of the circles
-						fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
-						alpha = rep(0.5, 5),
-						#cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
-						#cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
-						scaled = TRUE,
-						margin = 0,
-						cex = rep(1.5, 31),
-						cat.cex = rep(1.5, 5),
-						ind = FALSE # Do not automatically draw the diagram
-					)
-				} # End of if statement over length of elements
-
-				combination_set_operations[[combination_set_element_number]]$venn_diagram <- venn_diagram
-			}
-		} # End of for loop over degree_of_comparison
+						ggplot2::ggsave(file=filename_to_use, venn_diagram)
+					}
+				}
+			} # End of for loop over degree_of_comparison
+		} # End of if statement re: draw_venn_diagrams
 	} # End of if statement re: whether length(maximum_degree_of_comparison_calculated) > 1
 
 	# -------------------------------------------------
