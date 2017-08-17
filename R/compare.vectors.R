@@ -15,14 +15,25 @@
 
 compare.vectors <- function(
 	named_list_of_vectors_to_compare,
-	draw_venn_diagrams = FALSE # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
+	draw_venn_diagrams = FALSE, # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
+	vector_colors_for_venn_diagrams = NULL
 ){
 	vector_names <- names(named_list_of_vectors_to_compare)
 
 	# If we're generating Venn diagrams, we'll create a consistent color to use for each vector:
-	vector_colors <- as.list(generate_random_colors(length(vector_names)))
-	names(vector_colors) <- vector_names
-
+	if(draw_venn_diagrams == TRUE){
+		if(!is.null(vector_colors_for_venn_diagrams)){
+			if(length(vector_colors_for_venn_diagrams) != length(vector_names)){
+				stop("The number of colors for Venn diagrams (", length(vector_colors_for_venn_diagrams), ") does not match the number of vectors we are comparing (", length(vector_names), ").")
+			} else {
+				vector_colors <- as.list(vector_colors_for_venn_diagrams)
+				names(vector_colors) <- vector_names
+			}
+		} else { # If we've not been given colors to use, we'll generate random ones:
+			vector_colors <- as.list(generate_random_colors(length(vector_names)))
+			names(vector_colors) <- vector_names
+		}
+		} # End of if draw_venn_diagrams == TRUE
 	combinations_of_vector_names <- as.data.frame(
 		gtools::combinations(
 			length(vector_names), # size of the source vector

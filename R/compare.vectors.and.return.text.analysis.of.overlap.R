@@ -18,10 +18,19 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 	degrees_of_comparison_to_include = NULL, # By default, all degrees of comparison will be included (e.g., for three vectors, all 1-, 2-, and 3-way comparisons). If you only want to include 2- and 3-way comparisons, for example, you can use 'c(2, 3)' here.
 	cat_immediately = FALSE, # Whether to immediately print to the console using cat(). This needs to be true if venn diagrams are to be drawn.
 	draw_venn_diagrams = FALSE, # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
-	viewport_npc_width_height_for_venn_diagrams = 1.0
+	viewport_npc_width_height_for_venn_diagrams = 1.0,
+	vector_colors_for_venn_diagrams = NULL
 ){
 	if(draw_venn_diagrams == TRUE){ # Sanitize the user input
 		draw_venn_diagrams_value <- TRUE
+
+		if(!is.null(vector_colors_for_venn_diagrams)){ # Sanitize the user input
+			message("Using the following Venn diagram colors: ", veccompare::print.vector.with.and(vector_colors_for_venn_diagrams))
+
+			vector_colors_for_venn_diagrams_value <- vector_colors_for_venn_diagrams
+		} else {
+			vector_colors_for_venn_diagrams_value <- NULL
+		}
 
 		if(!is.numeric(viewport_npc_width_height_for_venn_diagrams)){
 			stop("'viewport_npc_width_height_for_venn_diagrams' is expected to be numeric (e.g., 1.0, 0.5, etc.).")
@@ -38,7 +47,11 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 
 	vector_names <- names(named_list_of_vectors_to_compare)
 
-	combination_set_operations <- veccompare::compare.vectors(named_list_of_vectors_to_compare, draw_venn_diagrams = draw_venn_diagrams_value)
+	combination_set_operations <- veccompare::compare.vectors(
+		named_list_of_vectors_to_compare,
+		draw_venn_diagrams = draw_venn_diagrams_value,
+		vector_colors_for_venn_diagrams = vector_colors_for_venn_diagrams_value
+	)
 
 	if(is.null(degrees_of_comparison_to_include)){ # If we *have not* been told which comparisons (e.g., 2-way, 3-way, etc.) to include, we'll use all of them by default:
 		degrees_of_comparisons <- 1:length(vector_names)
