@@ -214,7 +214,9 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 		} # End of for loop over comparisons_at_this_level_of_combination
 	} # End of for loop over degree of combinations
 
-	return(output_markdown)
+	if(cat_immediately == FALSE){
+		return(output_markdown)
+	}
 } # End of function definition
 
 # Test the function:
