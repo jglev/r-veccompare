@@ -1,6 +1,7 @@
 #' Compare all combinations of vectors using set operations
 #'
 #' @param named_list_of_vectors_to_compare A named list of vectors to compare (see, for example, \code{\link{example.vectors.list}}). Duplicate values in a given vector will only be counted once (for example, c("a", "a", "b", "c") will be treated identically to c("a", "b", "c").
+#' @param degrees_of_comparison_to_include A number or vector of numbers of which degrees of comparison to print (for example, 'c(2, 5)' would print only 2- and 5-way vector comparisons).
 #' @param draw_venn_diagrams A logical (TRUE/FALSE) indicator whether to draw Venn diagrams for all 2- through 5-way comparisons of vectors.
 #' @param vector_colors_for_venn_diagrams An optional vector of color names for Venn diagrams (if \code{draw_venn_diagrams} is \code{TRUE}). Color names are applied to the named vectors in \code{named_list_of_vectors_to_compare} in their order in \code{named_list_of_vectors_to_compare}. If this is blank, a random color will be selected for each vector. Either way, each vector will have a consistent color across the Venn diagrams in which it appears.
 #' @param save_venn_diagram_files A logical (TRUE/FALSE) indicator whether to save Venn diagrams as PNG files.
@@ -52,6 +53,7 @@
 #' ]
 compare.vectors <- function(
 	named_list_of_vectors_to_compare,
+	degrees_of_comparison_to_include = NULL,
 	draw_venn_diagrams = FALSE, # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
 	vector_colors_for_venn_diagrams = NULL,
 	save_venn_diagram_files = FALSE,
@@ -73,7 +75,8 @@ compare.vectors <- function(
 			vector_colors <- as.list(veccompare:::generate.random.colors(length(vector_names)))
 			names(vector_colors) <- vector_names
 		}
-		} # End of if draw_venn_diagrams == TRUE
+	} # End of if draw_venn_diagrams == TRUE
+
 	combinations_of_vector_names <- as.data.frame(
 		gtools::combinations(
 			length(vector_names), # size of the source vector
@@ -103,6 +106,29 @@ compare.vectors <- function(
 	if(nrow(combinations_of_vector_names_chunked_for_unique_items) > 1){
 		rownames(combinations_of_vector_names_chunked_for_unique_items) <- NULL # This is just for aesthetic purposes; it makes debugging easier.
 	}
+
+
+	if(is.null(degrees_of_comparison_to_include)){ # If we *have not* been told which comparisons (e.g., 2-way, 3-way, etc.) to include, we'll use all of them by default:
+		combinations_of_vector_names_chunked_for_unique_items <- combinations_of_vector_names_chunked_for_unique_items
+	} else { # If we *have* been told which comparisons to include, we'll set that here:
+		if(!is.numeric(degrees_of_comparison_to_include)){
+			stop("The argument 'degrees_of_comparison_to_include' is expected to be numeric.")
+		} else { # If we are dealing with a numeric argument, as expected.
+			combinations_of_vector_names_chunked_for_unique_items <- combinations_of_vector_names_chunked_for_unique_items[
+				which(
+					apply(
+						combinations_of_vector_names_chunked_for_unique_items,
+						1, # Iterate over rows
+						function(x){length(unique(x)) %in% degrees_of_comparison_to_include}
+					)
+				)
+				, # Use all columns
+			]
+
+			message("Calculating only the following degree(s) of comparison: ", veccompare::vector.print.with.and(degrees_of_comparison_to_include), "...")
+		}
+	}
+
 
 	combination_set_operations <- apply(
 		combinations_of_vector_names_chunked_for_unique_items,
@@ -140,7 +166,7 @@ compare.vectors <- function(
 				"elements_unique_to_first_element" = list_of_elements_unique_to_vectors
 			)
 
-			return(list_to_return)
+			# return(list_to_return)
 		}
 	)
 
@@ -171,13 +197,21 @@ compare.vectors <- function(
 			return(overlap_value)
 		} # End of sub-function definition
 
-		maximum_degree_of_comparison_calculated <- length(named_list_of_vectors_to_compare)
+		# Figure out which degrees of comparison we need to draw diagrams for:
+		if(!is.null(degrees_of_comparison_to_include)){
+			maximum_degree_of_comparison_calculated <- max(degrees_of_comparison_to_include)
+			degrees_of_comparison_for_venn_diagrams <- degrees_of_comparison_to_include[which(degrees_of_comparison_to_include >= 2 & degrees_of_comparison_to_include <= 5)]
+		} else {
+			maximum_degree_of_comparison_calculated <- length(named_list_of_vectors_to_compare)
+			degrees_of_comparison_for_venn_diagrams <- 2:(min(maximum_degree_of_comparison_calculated, 5))
+		}
 
 		if(maximum_degree_of_comparison_calculated >= 2){
 			if(maximum_degree_of_comparison_calculated >= 6){
 				message("Note: We can only draw up to 5-way diagrams. Thus, combinations of greater than 5 degrees (i.e., 6+ - way comparisons) will not be drawn...")
 			}
-			for(degree_of_comparison in 2:(min(maximum_degree_of_comparison_calculated, 5))){ # The Venn Diagram package can only draw up to 5-way comparisons, so we won't go above 5 when drawing Venn-Diagrams.
+
+			for(degree_of_comparison in degrees_of_comparison_for_venn_diagrams){ # The Venn Diagram package can only draw up to 5-way comparisons, so we won't go above 5 when drawing Venn-Diagrams.
 
 				message("Calculating Venn diagram for all ", degree_of_comparison, "-way comparisons...", sep = "")
 

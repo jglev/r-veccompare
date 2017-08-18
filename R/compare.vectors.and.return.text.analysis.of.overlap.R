@@ -4,7 +4,7 @@
 #'
 #' Use of this function is illustrated with the \code{Veccompare Overlap Report} RMarkdown template for RStudio that is installed as part of the \pkg{veccompare} package.
 #' @param named_list_of_vectors_to_compare (As in \code{\link{compare.vectors}}.)
-#' @param degrees_of_comparison_to_include A number or vector of numbers of which degrees of comparison to print (for example, 'c(2, 5)' would print only 2- and 5-way vector comparisons).
+#' @param degrees_of_comparison_to_include (As in \code{\link{compare.vectors}}.)
 #' @param cat_immediately A logical (TRUE/FALSE) indicator whether to immediately print the output, as in an RMarkdown document.
 #' @param draw_venn_diagrams (As in \code{\link{compare.vectors}}.)
 #' @param viewport_npc_width_height_for_venn_diagrams (As in \code{\link{render.venn.diagram}}.)
@@ -85,8 +85,11 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 
 	vector_names <- names(named_list_of_vectors_to_compare)
 
+	degrees_of_comparison_to_include_value <- degrees_of_comparison_to_include # This allows us below to avoid passing the argument 'degrees_of_comparison_to_include_value = degrees_of_comparison_to_include_value'
+
 	combination_set_operations <- veccompare::compare.vectors(
 		named_list_of_vectors_to_compare,
+		degrees_of_comparison_to_include = degrees_of_comparison_to_include_value,
 		draw_venn_diagrams = draw_venn_diagrams_value,
 		vector_colors_for_venn_diagrams = vector_colors_for_venn_diagrams_value,
 		save_venn_diagram_files = save_venn_diagram_files_value,
@@ -228,7 +231,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 					addition_to_output_markdown <- paste("\n",
 						"\n\nItems that are **unique to ",
 						involved_vector_for_getting_unique_elements, ":**",
-						"\n\n>*",
+						"\n\n> *",
 						vector.print.with.and(
 							list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]],
 							string_to_return_if_vector_is_empty = "(None)"

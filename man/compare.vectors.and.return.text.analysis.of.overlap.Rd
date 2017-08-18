@@ -16,7 +16,7 @@
 \arguments{
 \item{named_list_of_vectors_to_compare}{(As in \code{\link{compare.vectors}}.)}
 
-\item{degrees_of_comparison_to_include}{A number or vector of numbers of which degrees of comparison to print (for example, 'c(2, 5)' would print only 2- and 5-way vector comparisons).}
+\item{degrees_of_comparison_to_include}{(As in \code{\link{compare.vectors}}.)}
 
 \item{cat_immediately}{A logical (TRUE/FALSE) indicator whether to immediately print the output, as in an RMarkdown document.}
 

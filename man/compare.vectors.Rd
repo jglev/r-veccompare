@@ -4,12 +4,15 @@
 \alias{compare.vectors}
 \title{Compare all combinations of vectors using set operations}
 \usage{
-compare.vectors(named_list_of_vectors_to_compare, draw_venn_diagrams = FALSE,
+compare.vectors(named_list_of_vectors_to_compare,
+  degrees_of_comparison_to_include = NULL, draw_venn_diagrams = FALSE,
   vector_colors_for_venn_diagrams = NULL, save_venn_diagram_files = FALSE,
   location_for_venn_diagram_files = "", prefix_for_venn_diagram_files = "")
 }
 \arguments{
 \item{named_list_of_vectors_to_compare}{A named list of vectors to compare (see, for example, \code{\link{example.vectors.list}}). Duplicate values in a given vector will only be counted once (for example, c("a", "a", "b", "c") will be treated identically to c("a", "b", "c").}
+
+\item{degrees_of_comparison_to_include}{A number or vector of numbers of which degrees of comparison to print (for example, 'c(2, 5)' would print only 2- and 5-way vector comparisons).}
 
 \item{draw_venn_diagrams}{A logical (TRUE/FALSE) indicator whether to draw Venn diagrams for all 2- through 5-way comparisons of vectors.}
 
