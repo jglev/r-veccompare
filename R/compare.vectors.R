@@ -1,18 +1,16 @@
-# Hello, world!
-#
-# This is an example function named 'hello'
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Build and Reload Package:  'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
-
+#' Title
+#'
+#' @param named_list_of_vectors_to_compare
+#' @param draw_venn_diagrams
+#' @param vector_colors_for_venn_diagrams
+#' @param save_venn_diagram_files
+#' @param location_for_venn_diagram_files
+#' @param prefix_for_venn_diagram_files
+#'
+#' @return
+#' @export
+#'
+#' @examples
 compare.vectors <- function(
 	named_list_of_vectors_to_compare,
 	draw_venn_diagrams = FALSE, # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
@@ -155,7 +153,7 @@ compare.vectors <- function(
 
 					names_of_elements_in_this_comparison_set <- combination_set_operations[[combination_set_element_number]]$elements_involved
 
-					message("Drawing comparison between ", veccompare::print.vector.with.and(names_of_elements_in_this_comparison_set), "...", sep = "")
+					message("Drawing comparison between ", veccompare::vector.print.with.and(names_of_elements_in_this_comparison_set), "...", sep = "")
 
 					if(length(names_of_elements_in_this_comparison_set) == 2){
 						venn_diagram <- VennDiagram::draw.pairwise.venn(

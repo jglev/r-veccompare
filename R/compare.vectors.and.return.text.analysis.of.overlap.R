@@ -1,18 +1,19 @@
-# Hello, world!
-#
-# This is an example function named 'hello'
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Build and Reload Package:  'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
-
+#' Title
+#'
+#' @param named_list_of_vectors_to_compare
+#' @param degrees_of_comparison_to_include
+#' @param cat_immediately
+#' @param draw_venn_diagrams
+#' @param viewport_npc_width_height_for_venn_diagrams
+#' @param vector_colors_for_venn_diagrams
+#' @param save_venn_diagram_files
+#' @param location_for_venn_diagram_files
+#' @param prefix_for_venn_diagram_files
+#'
+#' @return
+#' @export
+#'
+#' @examples
 compare.vectors.and.return.text.analysis.of.overlap <- function(
 	named_list_of_vectors_to_compare,
 	degrees_of_comparison_to_include = NULL, # By default, all degrees of comparison will be included (e.g., for three vectors, all 1-, 2-, and 3-way comparisons). If you only want to include 2- and 3-way comparisons, for example, you can use 'c(2, 3)' here.
@@ -46,7 +47,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 		}
 
 		if(!is.null(vector_colors_for_venn_diagrams)){ # Sanitize the user input
-			message("Using the following Venn diagram colors: ", veccompare::print.vector.with.and(vector_colors_for_venn_diagrams))
+			message("Using the following Venn diagram colors: ", veccompare::vector.print.with.and(vector_colors_for_venn_diagrams))
 
 			vector_colors_for_venn_diagrams_value <- vector_colors_for_venn_diagrams
 		} else {
@@ -117,7 +118,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 			addition_to_output_markdown <- paste(
 				"\n\n",
 				"## **",
-				print.vector.with.and(
+				vector.print.with.and(
 					list_element[["elements_involved"]],
 					string_to_return_if_vector_is_empty = "(None)"),
 				"**",
@@ -154,7 +155,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 			if(length(list_element[["elements_involved"]]) > 1){ # If it's not just the element compared with itself:
 				addition_to_output_markdown <- paste("\n",
 					"- Total number of elements that **overlap among ",
-					print.vector.with.and(list_element[["elements_involved"]]), ":** ",
+					vector.print.with.and(list_element[["elements_involved"]]), ":** ",
 					length(list_element[["overlap_of_elements"]]),
 					" (",
 					round(
@@ -172,8 +173,8 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 
 				addition_to_output_markdown <- paste("\n",
 					"\t- Items that **overlap among ",
-					print.vector.with.and(list_element[["elements_involved"]]), ":** *",
-					print.vector.with.and(
+					vector.print.with.and(list_element[["elements_involved"]]), ":** *",
+					vector.print.with.and(
 						list_element[["overlap_of_elements"]],
 						string_to_return_if_vector_is_empty = "(None)"
 					),
@@ -212,7 +213,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 						"\n\nItems that are **unique to ",
 						involved_vector_for_getting_unique_elements, ":**",
 						"\n\n>*",
-						print.vector.with.and(
+						vector.print.with.and(
 							list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]],
 							string_to_return_if_vector_is_empty = "(None)"
 						),

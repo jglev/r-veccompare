@@ -4,11 +4,11 @@
 \name{example.vectors.list}
 \alias{example.vectors.list}
 \title{Example Vectors List}
-\format{A list of named vectors}
+\format{A list of named vectors.}
 \usage{
 example.vectors.list
 }
 \description{
-An example dataset containing several named vectors, which can be compared to one another for overlaps.
+An example dataset containing several named vectors, which can be compared to one another for overlaps, unique elements, etc.
 }
 \keyword{datasets}
