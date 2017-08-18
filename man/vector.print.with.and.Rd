@@ -5,19 +5,24 @@
 \title{Print a vector with commas and a final "and"}
 \usage{
 vector.print.with.and(vector_to_print,
-  string_to_return_if_vector_is_empty = "")
+  string_to_return_if_vector_is_empty = "", use_oxford_comma = TRUE)
 }
 \arguments{
 \item{vector_to_print}{A vector of strings (or elements able to be coerced into strings) to print.}
 
 \item{string_to_return_if_vector_is_empty}{If \code{vector_to_print} is empty, the string that should be returned (for example, "", "(None)", etc.)}
+
+\item{use_oxford_comma}{A logical (TRUE/FALSE) value indicating whether to use an Oxford comma ("One, two, and three" vs. "One, two and three").}
+}
+\value{
+A single string that concatenates the input, separating with commas and adding "and" before the final item.
 }
 \description{
 Print a vector with commas and a final "and"
 }
 \examples{
-
 vector.print.with.and(c("One", "Two", "Three", "Four"))
+vector.print.with.and(c("One", "Two", "Three", "Four"), use_oxford_comma = FALSE)
 vector.print.with.and(c("One", "Two"))
 vector.print.with.and(c("One"))
 vector.print.with.and(c(), string_to_return_if_vector_is_empty = "(None)") # Outputs "(None)"

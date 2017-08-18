@@ -8,7 +8,7 @@ render.venn.diagram(venn_diagram_created_with_VennDiagram_package,
   viewport_npc_width_height_to_force = 1)
 }
 \arguments{
-\item{venn_diagram_created_with_VennDiagram_package}{A grid-based diagram object -- for example a Venn diagram previously generated using \code{veccompare::compare.vectors()}.}
+\item{venn_diagram_created_with_VennDiagram_package}{A grid-based diagram object. For example, a Venn diagram previously generated using \code{veccompare::compare.vectors()}.}
 
 \item{viewport_npc_width_height_to_force}{The scale at which to print the image. If the image is cut off at its edges, for example, this can be set lower.}
 }

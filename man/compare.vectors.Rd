@@ -2,15 +2,68 @@
 % Please edit documentation in R/compare.vectors.R
 \name{compare.vectors}
 \alias{compare.vectors}
-\title{Title}
+\title{Compare all combinations of vectors using set operations}
 \usage{
 compare.vectors(named_list_of_vectors_to_compare, draw_venn_diagrams = FALSE,
   vector_colors_for_venn_diagrams = NULL, save_venn_diagram_files = FALSE,
   location_for_venn_diagram_files = "", prefix_for_venn_diagram_files = "")
 }
 \arguments{
-\item{prefix_for_venn_diagram_files}{}
+\item{named_list_of_vectors_to_compare}{A named list of vectors to compare (see, for example, \code{veccompare::example.vectors.list}). Duplicate values in a given vector will only be counted once (for example, c("a", "a", "b", "c") will be treated identically to c("a", "b", "c").}
+
+\item{draw_venn_diagrams}{A logical (TRUE/FALSE) indicator whether to draw Venn diagrams for all 2- through 5-way comparisons of vectors.}
+
+\item{vector_colors_for_venn_diagrams}{An optional vector of color names for Venn diagrams (if \code{draw_venn_diagrams} is \code{TRUE}). Color names are applied to the named vectors in \code{named_list_of_vectors_to_compare} in their order in \code{named_list_of_vectors_to_compare}. If this is blank, a random color will be selected for each vector. Either way, each vector will have a consistent color across the Venn diagrams in which it appears.}
+
+\item{save_venn_diagram_files}{A logical (TRUE/FALSE) indicator whether to save Venn diagrams as PNG files.}
+
+\item{location_for_venn_diagram_files}{An optional string giving a directory into which to save Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}). This location must already exist on the filesystem.}
+
+\item{prefix_for_venn_diagram_files}{An optional string giving a prefix to prepend to saved Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}).}
+}
+\value{
+A list, with one object for each comparison of vectors. The list contains the following elements:
+\describe{
+  \item{elements_involved}{The vector names involved in the comparison.}
+  \item{union_of_elements}{A vector of all (deduplicated) items involved in the comparison, across all of the vectors.}
+  \item{overlap_of_elements}{A vector of the deduplicated elements that occured in all of the compared vectors.}
+  \item{elements_unique_to_first_element}{This element will have a sub-element named for each vector being compared (i.e., for each of the names in \code{$elements_involved}). The (deduplicated) items that were unique to that vector (i.e., not overlapping with any other vector in the comparison).}
+  \item{venn_diagram}{If \code{save_venn_diagram_files} is \code{TRUE}, and the comparison is of 2 through 5 vectors, a Venn diagram object produced using the \code{VennDiagram} package. This diagram can be rendered using \code{veccompare::render.venn.diagram}.}
+}
+
+This list object can be compiled into a Markdown report using \code{veccompare::compare.vectors.and.return.text.analysis.of.overlap()}, and with the \code{Veccompare Overlap Report} RMarkdown template for RStudio that is installed as part of the \code{veccompare} package.
 }
 \description{
-Title
+Compare all combinations of vectors using set operations
+}
+\examples{
+
+# One can extract similar elements across list items using the \\code{purrr} package:
+purrr::map(example, "elements_involved")
+
+# Similarly, to extract all comparisons that involve "vector_a":
+example[
+    sapply(
+        purrr::map(example, "elements_involved"),
+       function(x){"vector_a" \%in\% x}
+   )
+]
+
+# Similarly, to find all comparisons that were about "vector_a" and "vector_c":
+example[
+    sapply(
+        purrr::map(example, "elements_involved"),
+        function(x){setequal(x, c("vector_a", "vector_c"))}
+    )
+]
+
+# Similarly, to get all elements that did a two-way comparison:
+example[
+    which(
+        sapply(
+            purrr::map(example, "elements_involved"),
+            function(x){length(x) == 2}
+        )
+    )
+]
 }
