@@ -41,6 +41,14 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 	location_for_venn_diagram_files = "",
 	prefix_for_venn_diagram_files = ""
 ){
+
+	# First, we'll escape special Markdown characters:
+	message("Escaping special Markdown characters (_, *, /)...")
+
+	named_list_of_vectors_to_compare <- lapply(named_list_of_vectors_to_compare, function(x){sub("_", "\\\\_", x)})
+	named_list_of_vectors_to_compare <- lapply(named_list_of_vectors_to_compare, function(x){sub("*", "\\\\*", x, fixed = TRUE)})
+	named_list_of_vectors_to_compare <- lapply(named_list_of_vectors_to_compare, function(x){sub("/", "\\\\/", x)})
+
 	if(draw_venn_diagrams == TRUE){ # Sanitize the user input
 		draw_venn_diagrams_value <- TRUE
 
