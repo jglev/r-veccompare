@@ -20,7 +20,9 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 	draw_venn_diagrams = FALSE, # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
 	viewport_npc_width_height_for_venn_diagrams = 1.0,
 	vector_colors_for_venn_diagrams = NULL,
-	save_venn_diagram_files = FALSE
+	save_venn_diagram_files = FALSE,
+	location_for_venn_diagram_files = "",
+	prefix_for_venn_diagram_files = ""
 ){
 	if(draw_venn_diagrams == TRUE){ # Sanitize the user input
 		draw_venn_diagrams_value <- TRUE
@@ -29,6 +31,18 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 			save_venn_diagram_files_value <- TRUE
 		} else {
 			save_venn_diagram_files_value <- FALSE
+		}
+
+		if(location_for_venn_diagram_files != ""){ # Sanitize the user input
+			location_for_venn_diagram_files_value <- as.character(location_for_venn_diagram_files)
+		} else {
+			location_for_venn_diagram_files_value <- ""
+		}
+
+		if(prefix_for_venn_diagram_files != ""){ # Sanitize the user input
+			prefix_for_venn_diagram_files_value <- as.character(prefix_for_venn_diagram_files)
+		} else {
+			prefix_for_venn_diagram_files_value <- ""
 		}
 
 		if(!is.null(vector_colors_for_venn_diagrams)){ # Sanitize the user input
@@ -58,7 +72,9 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 		named_list_of_vectors_to_compare,
 		draw_venn_diagrams = draw_venn_diagrams_value,
 		vector_colors_for_venn_diagrams = vector_colors_for_venn_diagrams_value,
-		save_venn_diagram_files = save_venn_diagram_files_value
+		save_venn_diagram_files = save_venn_diagram_files_value,
+		location_for_venn_diagram_files = location_for_venn_diagram_files_value,
+		prefix_for_venn_diagram_files = prefix_for_venn_diagram_files_value
 	)
 
 	if(is.null(degrees_of_comparison_to_include)){ # If we *have not* been told which comparisons (e.g., 2-way, 3-way, etc.) to include, we'll use all of them by default:

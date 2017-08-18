@@ -17,7 +17,9 @@ compare.vectors <- function(
 	named_list_of_vectors_to_compare,
 	draw_venn_diagrams = FALSE, # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
 	vector_colors_for_venn_diagrams = NULL,
-	save_venn_diagram_files = FALSE
+	save_venn_diagram_files = FALSE,
+	location_for_venn_diagram_files = "",
+	prefix_for_venn_diagram_files = ""
 ){
 	vector_names <- names(named_list_of_vectors_to_compare)
 
@@ -281,11 +283,27 @@ compare.vectors <- function(
 							)
 						)
 
-						message("Saving Venn diagram to '", file.path(getwd(), filename_to_use), "'...")
+						# Sanitize user inputs:
+						if(location_for_venn_diagram_files != ""){
+							location_for_venn_diagram_files_to_use <- as.character(location_for_venn_diagram_files)
+						} else {
+							location_for_venn_diagram_files_to_use <- getwd()
+						}
 
-						ggplot2::ggsave(file=filename_to_use, venn_diagram)
-					}
-				}
+						# Sanitize user inputs:
+						if(prefix_for_venn_diagram_files != ""){
+							prefix_for_venn_diagram_files_to_use <- as.character(prefix_for_venn_diagram_files)
+						} else {
+							prefix_for_venn_diagram_files_to_use <- ""
+						}
+
+						final_path_for_venn_diagram <- file.path(location_for_venn_diagram_files_to_use, paste(prefix_for_venn_diagram_files_to_use, filename_to_use, sep = ""))
+
+						message("Saving Venn diagram to '", final_path_for_venn_diagram, "'...")
+
+						ggplot2::ggsave(file = final_path_for_venn_diagram, venn_diagram)
+					} # End of if(save_venn_diagram_files == TRUE)
+				} # End of for loop over combination_set_element_number
 			} # End of for loop over degree_of_comparison
 		} # End of if statement re: draw_venn_diagrams
 	} # End of if statement re: whether length(maximum_degree_of_comparison_calculated) > 1
