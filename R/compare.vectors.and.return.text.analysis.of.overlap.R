@@ -124,7 +124,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 				purrr::map(combination_set_operations, "elements_involved"),
 				function(x){length(x) == n_way_comparison}
 			)
-			]
+		]
 
 		for(list_element in comparisons_at_this_level_of_combination){
 			if(length(list_element) == 1){

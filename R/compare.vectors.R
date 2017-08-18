@@ -64,6 +64,37 @@ compare.vectors <- function(
 
 	# If we're generating Venn diagrams, we'll create a consistent color to use for each vector:
 	if(draw_venn_diagrams == TRUE){
+
+		# Generate the combinations of vectors to use for Venn diagram drawing: ------------------------
+		# Figure out which degrees of comparison we need to calculate, especially if we're to draw Venn diagrams (which will require that, e.g., if we're drawing a 5-way comparison, we've also calculated all of the 1- to 4-way comparisons)
+		if(!is.null(degrees_of_comparison_to_include)){
+			maximum_degree_of_comparison_calculated <- max(degrees_of_comparison_to_include)
+
+			if(draw_venn_diagrams == TRUE & maximum_degree_of_comparison_calculated >= 2){
+				degrees_of_comparison_for_venn_diagrams <- degrees_of_comparison_to_include
+
+				degrees_of_comparison_to_include <- seq(
+					from = 2,
+					to = min(maximum_degree_of_comparison_calculated, 5) # We can only draw up to 5-way comparisons
+				)
+
+				# Tell the user if there are elements that need to be computed in order to draw Venn diagrams but that weren't asked for:
+				degrees_of_comparison_not_asked_for_but_needed_for_diagrams <- degrees_of_comparison_to_include[which(! degrees_of_comparison_to_include %in% degrees_of_comparison_for_venn_diagrams)]
+
+				if(length(degrees_of_comparison_not_asked_for_but_needed_for_diagrams) > 0){
+					message("Note: We need to calculate all combinations of degree(s) ", veccompare::vector.print.with.and(degrees_of_comparison_not_asked_for_but_needed_for_diagrams), " in addition to the degrees you asked for (", veccompare::vector.print.with.and(degrees_of_comparison_to_include), "), in order to draw Venn diagrams. Proceeding with calculating all of those...")
+				}
+			}
+		} else {
+			maximum_degree_of_comparison_calculated <- length(named_list_of_vectors_to_compare)
+
+			if(draw_venn_diagrams == TRUE & maximum_degree_of_comparison_calculated >= 2){
+				degrees_of_comparison_for_venn_diagrams <- 2:(min(maximum_degree_of_comparison_calculated, 5)) # We can only draw up to 5-way comparisons
+			}
+		} # End of if(!is.null(degrees_of_comparison_to_include))
+
+		# Generate Venn diagram colors ------------------------
+
 		if(!is.null(vector_colors_for_venn_diagrams)){
 			if(length(vector_colors_for_venn_diagrams) != length(vector_names)){
 				stop("The number of colors for Venn diagrams (", length(vector_colors_for_venn_diagrams), ") does not match the number of vectors we are comparing (", length(vector_names), ").")
@@ -166,15 +197,14 @@ compare.vectors <- function(
 				"elements_unique_to_first_element" = list_of_elements_unique_to_vectors
 			)
 
-			# return(list_to_return)
+			return(list_to_return)
 		}
 	)
 
 	# str(combination_set_operations)
 
-	# -------------------------------------------------
-	# Draw Venn diagrams
-	# -------------------------------------------------
+	# Draw Venn diagrams -------------------------------------------------
+
 	if(draw_venn_diagrams == TRUE){
 		# We will now create Venn diagrams for each level of comparison (e.g., 2-way, 3-way, etc.), from 2 to the maximum level of comparison (up to 5-way, since that's the most that the VennDiagram package I'm using can draw):
 
@@ -196,15 +226,6 @@ compare.vectors <- function(
 			)
 			return(overlap_value)
 		} # End of sub-function definition
-
-		# Figure out which degrees of comparison we need to draw diagrams for:
-		if(!is.null(degrees_of_comparison_to_include)){
-			maximum_degree_of_comparison_calculated <- max(degrees_of_comparison_to_include)
-			degrees_of_comparison_for_venn_diagrams <- degrees_of_comparison_to_include[which(degrees_of_comparison_to_include >= 2 & degrees_of_comparison_to_include <= 5)]
-		} else {
-			maximum_degree_of_comparison_calculated <- length(named_list_of_vectors_to_compare)
-			degrees_of_comparison_for_venn_diagrams <- 2:(min(maximum_degree_of_comparison_calculated, 5))
-		}
 
 		if(maximum_degree_of_comparison_calculated >= 2){
 			if(maximum_degree_of_comparison_calculated >= 6){
@@ -379,9 +400,7 @@ compare.vectors <- function(
 		} # End of if statement re: draw_venn_diagrams
 	} # End of if statement re: whether length(maximum_degree_of_comparison_calculated) > 1
 
-	# -------------------------------------------------
-	# End of Draw Venn diagrams
-	# -------------------------------------------------
+	# End of Draw Venn diagrams -------------------------------------------------
 
 	# To test the last-drawn diagram:
 	# grid::grid.newpage()
