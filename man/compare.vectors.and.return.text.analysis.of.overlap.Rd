@@ -3,7 +3,7 @@
 %   R/compare.vectors.and.return.text.analysis.of.overlap.R
 \name{compare.vectors.and.return.text.analysis.of.overlap}
 \alias{compare.vectors.and.return.text.analysis.of.overlap}
-\title{Title}
+\title{Create a Markdown report from the output of \code{\link{compare.vectors}}}
 \usage{
 
   compare.vectors.and.return.text.analysis.of.overlap(named_list_of_vectors_to_compare,
@@ -14,8 +14,44 @@
   location_for_venn_diagram_files = "", prefix_for_venn_diagram_files = "")
 }
 \arguments{
-\item{prefix_for_venn_diagram_files}{}
+\item{named_list_of_vectors_to_compare}{(As in \code{\link{compare.vectors}}.)}
+
+\item{degrees_of_comparison_to_include}{A number or vector of numbers of which degrees of comparison to print (for example, 'c(2, 5)' would print only 2- and 5-way vector comparisons).}
+
+\item{cat_immediately}{A logical (TRUE/FALSE) indicator whether to immediately print the output, as in an RMarkdown document.}
+
+\item{draw_venn_diagrams}{(As in \code{\link{compare.vectors}}.)}
+
+\item{viewport_npc_width_height_for_venn_diagrams}{(As in \code{\link{render.venn.diagram}}.)}
+
+\item{vector_colors_for_venn_diagrams}{(As in \code{\link{compare.vectors}}.)}
+
+\item{save_venn_diagram_files}{(As in \code{\link{compare.vectors}}.)}
+
+\item{location_for_venn_diagram_files}{(As in \code{\link{compare.vectors}}.)}
+
+\item{prefix_for_venn_diagram_files}{(As in \code{\link{compare.vectors}}.)}
+}
+\value{
+A string of Markdown (and Venn diagrams, if \code{draw_venn_diagrams} is \code{TRUE}).
+
+If \code{cat_immediately} is \code{TRUE}, nothing is returned by the function; rather, the output Markdown is printed immediately (for example, as part of a Knitted RMarkdown document, or to the console).
+
+If \code{cat_immediately} is \code{FALSE}, the output can be saved to an object (as in the example below). This object can then be printed using \code{cat()}.
+
+NOTE WELL: If \code{cat_immediately} is \code{FALSE}, the output \emph{should} be saved to an object. If it is not, R will give an error message when printing to the console, because of unescaped special characters (which work correctly when \code{cat()} is used).
 }
 \description{
-Title
+This function is a wrapper for \code{\link{compare.vectors}}. It creates a Markdown report of all degrees of set comparisons between a named list of vectors.
+}
+\details{
+Use of this function is illustrated with the \code{Veccompare Overlap Report} RMarkdown template for RStudio that is installed as part of the \pkg{veccompare} package.
+}
+\examples{
+example <- compare.vectors.and.return.text.analysis.of.overlap(
+    veccompare::example.vectors.list,
+    cat_immediately = FALSE,
+    draw_venn_diagrams = FALSE
+)
+cat(example)
 }

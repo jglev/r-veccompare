@@ -2,7 +2,7 @@
 % Please edit documentation in R/vector.print.with.and.R
 \name{vector.print.with.and}
 \alias{vector.print.with.and}
-\title{Print a vector with commas and a final "and"}
+\title{Print a vector with commas and a final "and".}
 \usage{
 vector.print.with.and(vector_to_print,
   string_to_return_if_vector_is_empty = "", use_oxford_comma = TRUE)
@@ -18,7 +18,7 @@ vector.print.with.and(vector_to_print,
 A single string that concatenates the input, separating with commas and adding "and" before the final item.
 }
 \description{
-Print a vector with commas and a final "and"
+Print a vector with commas and a final "and".
 }
 \examples{
 vector.print.with.and(c("One", "Two", "Three", "Four"))

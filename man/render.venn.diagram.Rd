@@ -10,13 +10,13 @@ render.venn.diagram(venn_diagram_created_with_VennDiagram_package,
 \arguments{
 \item{venn_diagram_created_with_VennDiagram_package}{A grid-based diagram object. For example, a Venn diagram previously generated using \code{veccompare::compare.vectors()}.}
 
-\item{viewport_npc_width_height_to_force}{The scale at which to print the image. If the image is cut off at its edges, for example, this can be set lower.}
+\item{viewport_npc_width_height_to_force}{The scale at which to print the image. If the image is cut off at its edges, for example, this can be set lower than 1.0.}
 }
 \value{
 The function will not return a value; rather, it will print the image.
 }
 \description{
-\code{render.venn.diagram} is a wrapper function for printing a \code{grid}-based image using \code{grid::grid.draw()}.
+A wrapper function for printing a \code{grid}-based image using \code{grid::grid.draw()}.
 }
 \examples{
 # Create the comparisons across vectors:

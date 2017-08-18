@@ -1,4 +1,4 @@
-#' Print a vector with commas and a final "and"
+#' Print a vector with commas and a final "and".
 #'
 #' @param vector_to_print A vector of strings (or elements able to be coerced into strings) to print.
 #' @param string_to_return_if_vector_is_empty If \code{vector_to_print} is empty, the string that should be returned (for example, "", "(None)", etc.)

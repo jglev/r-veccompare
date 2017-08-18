@@ -9,7 +9,7 @@ compare.vectors(named_list_of_vectors_to_compare, draw_venn_diagrams = FALSE,
   location_for_venn_diagram_files = "", prefix_for_venn_diagram_files = "")
 }
 \arguments{
-\item{named_list_of_vectors_to_compare}{A named list of vectors to compare (see, for example, \code{veccompare::example.vectors.list}). Duplicate values in a given vector will only be counted once (for example, c("a", "a", "b", "c") will be treated identically to c("a", "b", "c").}
+\item{named_list_of_vectors_to_compare}{A named list of vectors to compare (see, for example, \code{\link{example.vectors.list}}). Duplicate values in a given vector will only be counted once (for example, c("a", "a", "b", "c") will be treated identically to c("a", "b", "c").}
 
 \item{draw_venn_diagrams}{A logical (TRUE/FALSE) indicator whether to draw Venn diagrams for all 2- through 5-way comparisons of vectors.}
 
@@ -28,10 +28,10 @@ A list, with one object for each comparison of vectors. The list contains the fo
   \item{union_of_elements}{A vector of all (deduplicated) items involved in the comparison, across all of the vectors.}
   \item{overlap_of_elements}{A vector of the deduplicated elements that occured in all of the compared vectors.}
   \item{elements_unique_to_first_element}{This element will have a sub-element named for each vector being compared (i.e., for each of the names in \code{$elements_involved}). The (deduplicated) items that were unique to that vector (i.e., not overlapping with any other vector in the comparison).}
-  \item{venn_diagram}{If \code{save_venn_diagram_files} is \code{TRUE}, and the comparison is of 2 through 5 vectors, a Venn diagram object produced using the \code{VennDiagram} package. This diagram can be rendered using \code{veccompare::render.venn.diagram}.}
+  \item{venn_diagram}{If \code{save_venn_diagram_files} is \code{TRUE}, and the comparison is of 2 through 5 vectors, a Venn diagram object produced using the \pkg{VennDiagram} package. This diagram can be rendered using \code{\link{render.venn.diagram}}.}
 }
 
-This list object can be compiled into a Markdown report using \code{veccompare::compare.vectors.and.return.text.analysis.of.overlap()}, and with the \code{Veccompare Overlap Report} RMarkdown template for RStudio that is installed as part of the \code{veccompare} package.
+To compile this list object into a Markdown report, use \code{\link{compare.vectors.and.return.text.analysis.of.overlap}}. For an example of this usage, see the \code{Veccompare Overlap Report} RMarkdown template for RStudio that is installed as part of the \pkg{veccompare} package.
 }
 \description{
 Compare all combinations of vectors using set operations

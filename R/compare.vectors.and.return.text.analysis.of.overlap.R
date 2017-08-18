@@ -1,19 +1,35 @@
-#' Title
+#' Create a Markdown report from the output of \code{\link{compare.vectors}}
 #'
-#' @param named_list_of_vectors_to_compare
-#' @param degrees_of_comparison_to_include
-#' @param cat_immediately
-#' @param draw_venn_diagrams
-#' @param viewport_npc_width_height_for_venn_diagrams
-#' @param vector_colors_for_venn_diagrams
-#' @param save_venn_diagram_files
-#' @param location_for_venn_diagram_files
-#' @param prefix_for_venn_diagram_files
+#' This function is a wrapper for \code{\link{compare.vectors}}. It creates a Markdown report of all degrees of set comparisons between a named list of vectors.
 #'
-#' @return
+#' Use of this function is illustrated with the \code{Veccompare Overlap Report} RMarkdown template for RStudio that is installed as part of the \pkg{veccompare} package.
+#' @param named_list_of_vectors_to_compare (As in \code{\link{compare.vectors}}.)
+#' @param degrees_of_comparison_to_include A number or vector of numbers of which degrees of comparison to print (for example, 'c(2, 5)' would print only 2- and 5-way vector comparisons).
+#' @param cat_immediately A logical (TRUE/FALSE) indicator whether to immediately print the output, as in an RMarkdown document.
+#' @param draw_venn_diagrams (As in \code{\link{compare.vectors}}.)
+#' @param viewport_npc_width_height_for_venn_diagrams (As in \code{\link{render.venn.diagram}}.)
+#' @param vector_colors_for_venn_diagrams (As in \code{\link{compare.vectors}}.)
+#' @param save_venn_diagram_files (As in \code{\link{compare.vectors}}.)
+#' @param location_for_venn_diagram_files (As in \code{\link{compare.vectors}}.)
+#' @param prefix_for_venn_diagram_files (As in \code{\link{compare.vectors}}.)
+#'
+#' @return A string of Markdown (and Venn diagrams, if \code{draw_venn_diagrams} is \code{TRUE}).
+#'
+#' If \code{cat_immediately} is \code{TRUE}, nothing is returned by the function; rather, the output Markdown is printed immediately (for example, as part of a Knitted RMarkdown document, or to the console).
+#'
+#' If \code{cat_immediately} is \code{FALSE}, the output can be saved to an object (as in the example below). This object can then be printed using \code{cat()}.
+#'
+#' NOTE WELL: If \code{cat_immediately} is \code{FALSE}, the output \emph{should} be saved to an object. If it is not, R will give an error message when printing to the console, because of unescaped special characters (which work correctly when \code{cat()} is used).
+#'
 #' @export
 #'
 #' @examples
+#' example <- compare.vectors.and.return.text.analysis.of.overlap(
+#'     veccompare::example.vectors.list,
+#'     cat_immediately = FALSE,
+#'     draw_venn_diagrams = FALSE
+#' )
+#' cat(example)
 compare.vectors.and.return.text.analysis.of.overlap <- function(
 	named_list_of_vectors_to_compare,
 	degrees_of_comparison_to_include = NULL, # By default, all degrees of comparison will be included (e.g., for three vectors, all 1-, 2-, and 3-way comparisons). If you only want to include 2- and 3-way comparisons, for example, you can use 'c(2, 3)' here.
@@ -235,6 +251,3 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 		return(output_markdown)
 	}
 } # End of function definition
-
-# Test the function:
-# compare.vectors.and.return.text.analysis.of.overlap(example.vectors.list)
