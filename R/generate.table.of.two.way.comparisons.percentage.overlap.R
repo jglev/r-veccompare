@@ -135,6 +135,22 @@ ggnet2(
 
 
 
+melted_table$Decimal_Percentage[melted_table$Decimal_Percentage == 0] <- .01
+
+list_item_sizes <- sapply(named_list_of_vectors[order(names(named_list_of_vectors))], length)
+list_item_relative_sizes <- list_item_sizes / max(list_item_sizes)*10
+
+qgraph_output <- qgraph::qgraph(
+	melted_table[order(melted_table$Vector_Name),], # Put this in alphabetical order by the 'Vector_Name' column. This way, we can line these names up with the vsize names below.
+	esize = 5,
+	directed = TRUE,
+	theme = "gray",
+	edge.labels = TRUE,
+	shape = "circle",
+	# labels = Labels
+	vsize = list_item_relative_sizes, # Get the size of each list object in the order it appears in the melted table (this is from using 'vsize = c(1,2,3,4,5,6)' and noting that the size increases were in line with the output of 'unique(melted_table$Vector_Name)')
+)
+
 
 
 
