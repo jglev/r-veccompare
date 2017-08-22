@@ -3,6 +3,7 @@
 #' @param named_list_of_vectors (As in \code{\link{compare.vectors}}.)
 #' @param output_type Either \code{"table"}, \code{"matrix_plot"}, or \code{"network_graph"}. \code{"table"} will return a matrix showing percentage overlap between each pair of vectors. \code{"matrix_plot"} will plot this table, coloring it by the amount of overlap. \code{"network_graph"} will return a network graph image illustrating the overlap percentages between each pair of vectors.
 #' @param melt_table A logical (TRUE/FALSE) indicator, when \code{output_type} is \code{"table"}, whether to print the output in \code{\link[reshape2]{melt}ed} form (using the \pkg{reshape2} package).
+#' @param network_graph_minimum \code{minimum} argument from \code{\link[qgraph]{qgraph}}, for when \code{output_type} is \code{"network_graph"}.
 #'
 #' @return Either a matrix (if \code{output} is \code{"table"}), or an image (if \code{output} is \code{"matrix_plot"} or \code{"network_graph"}). If an image is printed, nothing is returned by the function; rather, the output is printed immediately.
 #'
@@ -32,7 +33,8 @@
 summarize.two.way.comparisons.percentage.overlap <- function(
 	named_list_of_vectors,
 	output_type = "table", # c("table", "matrix_plot", "network_graph")
-	melt_table = FALSE # Overridden by output_type
+	melt_table = FALSE, # Overridden by output_type
+	network_graph_minimum = 0
 ){
 
 	if(! output_type %in% c("table", "matrix_plot", "network_graph")){
@@ -120,24 +122,29 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 		message("Drawing network graph...")
 
 		qgraph_output <- qgraph::qgraph(
-			melted_matrix[order(melted_matrix$Vector_Name),], # Put this in alphabetical order by the 'Vector_Name' column. This way, we can line these names up with the vsize names below.
+			# as.matrix(melted_matrix[order(melted_matrix$Vector_Name),1:2]), # Put this in alphabetical order by the 'Vector_Name' column. This way, we can line these names up with the vsize names below.
+			output_table,
 			esize = 5,
 			directed = TRUE,
-			theme = "colorblind",
+			theme = "gray",
 			edge.labels = TRUE,
 			shape = "circle",
 			# labels = Labels
 			vsize = list_item_relative_sizes, # Get the size of each list object in the order it appears in the melted table (this is from using 'vsize = c(1,2,3,4,5,6)' and noting that the size increases were in line with the output of 'unique(melted_matrix$Vector_Name)')
-			minimum = 0,
+			minimum = network_graph_minimum,
 			threshold = -1, # Set this lower than 0, to effectively turn it off.
 			DoNotPlot = FALSE,
 
 			legend = TRUE,
-			labels = FALSE,
+			# labels = FALSE,
+			labels = c(1:length(named_list_of_vectors)), # names(named_list_of_vectors)[order(names(named_list_of_vectors))],
+			label.scale = TRUE,
+			label.scale.equal = FALSE,
+			label.cex = 2,
 				#labels = c("a"), # as.character(seq(1:length(named_list_of_vectors))), # There currently seems to be a bug with using this option (whether with "a" or something more substantive, including a vector like 'names(named_list_of_vectors)[order(names(named_list_of_vectors))]').
-			groups = names(named_list_of_vectors)[order(names(named_list_of_vectors))] # Cause the nodes to be colored based on their names.
+			#groups = names(named_list_of_vectors)[order(names(named_list_of_vectors))], # Cause the nodes to be colored based on their names.
 
-			# nodeNames = names(named_list_of_vectors)[order(names(named_list_of_vectors))]
+			nodeNames = names(named_list_of_vectors)[order(names(named_list_of_vectors))]
 		)
 
 		# return(qgraph_output)

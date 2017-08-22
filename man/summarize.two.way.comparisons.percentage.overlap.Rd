@@ -6,7 +6,7 @@
 \title{Summarize Percentage Overlap for Two-Way Comparisons between Vectors}
 \usage{
 summarize.two.way.comparisons.percentage.overlap(named_list_of_vectors,
-  output_type = "table", melt_table = FALSE)
+  output_type = "table", melt_table = FALSE, network_graph_minimum = 0)
 }
 \arguments{
 \item{named_list_of_vectors}{(As in \code{\link{compare.vectors}}.)}
@@ -14,6 +14,8 @@ summarize.two.way.comparisons.percentage.overlap(named_list_of_vectors,
 \item{output_type}{Either \code{"table"}, \code{"matrix_plot"}, or \code{"network_graph"}. \code{"table"} will return a matrix showing percentage overlap between each pair of vectors. \code{"matrix_plot"} will plot this table, coloring it by the amount of overlap. \code{"network_graph"} will return a network graph image illustrating the overlap percentages between each pair of vectors.}
 
 \item{melt_table}{A logical (TRUE/FALSE) indicator, when \code{output_type} is \code{"table"}, whether to print the output in \code{\link[reshape2]{melt}ed} form (using the \pkg{reshape2} package).}
+
+\item{network_graph_minimum}{\code{minimum} argument from \code{\link[qgraph]{qgraph}}, for when \code{output_type} is \code{"network_graph"}.}
 }
 \value{
 Either a matrix (if \code{output} is \code{"table"}), or an image (if \code{output} is \code{"matrix_plot"} or \code{"network_graph"}). If an image is printed, nothing is returned by the function; rather, the output is printed immediately.
