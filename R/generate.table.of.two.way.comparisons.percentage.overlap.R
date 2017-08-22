@@ -1,8 +1,16 @@
-generate.table.of.two.way.comparisons.percentage.overlap <- function(
+summarize.two.way.comparisons.percentage.overlap <- function(
 	named_list_of_vectors,
-	output_table_as_plot = FALSE,
-	melt_table = FALSE # Overridden by output_table_as_plot
+	output_type = "table", # c("table", "matrix_plot", "network_graph")
+	melt_table = FALSE # Overridden by output_type
 ){
+	
+	if(! output_type %in% c("table", "matrix_plot", "network_graph")){
+		stop("'output_type' must be one of the following: 'table', 'matrix_plot', 'network_graph'.")
+	} else {
+		if(length(output_type) != 1){
+			stop("'output_type' must have only 1 value.")
+		}
+	}
 	
 	# Comput all two-way comparisons:
 	two_way_comparison_output <- veccompare::compare.vectors(
@@ -20,7 +28,7 @@ generate.table.of.two.way.comparisons.percentage.overlap <- function(
 	
 	rownames(output_table) <- names(named_list_of_vectors)
 	colnames(output_table) <- names(named_list_of_vectors)
-		
+	
 	for(list_element in two_way_comparison_output){
 		
 		for(involved_vector_for_getting_unique_elements in list_element[["elements_involved"]]){
@@ -31,13 +39,24 @@ generate.table.of.two.way.comparisons.percentage.overlap <- function(
 			output_table[
 				list_element[["elements_involved"]][list_element[["elements_involved"]] != involved_vector_for_getting_unique_elements],
 				involved_vector_for_getting_unique_elements
-			] <- percent_unique_to_involved_vector
-		
+				] <- percent_unique_to_involved_vector
+			
 		} # End of for loop over involved_vector_for_getting_unique_elements
 	} # End of for loop over list_element
 	
-	if(output_table_as_plot == TRUE){
+	if(
+		(output_type == "table" & melt_table == TRUE) |
+		output_type == "network_graph"
+	){
+			melted_matrix <- reshape2::melt(as.matrix(output_table))
+			colnames(melted_matrix) <- c("Vector_Name", "Overlaps_With", "Decimal_Percentage")
+	}
+	
+	if(output_type == "matrix_plot"){
 		# See https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html for corrplot examples:
+		
+		message("Drawing plot of table...")
+		
 		plot_of_table <- corrplot::corrplot(
 			output_table, 
 			method="number", 
@@ -50,110 +69,61 @@ generate.table.of.two.way.comparisons.percentage.overlap <- function(
 			cl.align="r"
 		)
 		
-		return(plot_of_table)
-	} else if(output_table_as_plot == FALSE & melt_table == TRUE){
-		melted_matrix <- reshape2::melt(as.matrix(output_table))
+		# return(plot_of_table)
+	} else if(output_type == "table"){
+		if(melt_table == TRUE){
+			return(melted_matrix)
+		} else {
+			return(output_table)
+		}
+	}	else if(output_type == "network_graph") {
+		# Remove self-directed edges, as they aren't useful for this type of network graph:
+		melted_table <- melted_table[
+			melted_table$Vector_Name != melted_table$Overlaps_With
+			, # Use all columns
+			]
 		
-		colnames(melted_matrix) <- c("Vector_Name", "Overlaps_With", "Decimal_Percentage")
+		list_item_sizes <- sapply(named_list_of_vectors[order(names(named_list_of_vectors))], length)
+		list_item_relative_sizes <- list_item_sizes / max(list_item_sizes)*10
 		
-		return(melted_matrix)
-	}	else{
-		return(output_table)
+		message("Drawing network graph...")
+		
+		qgraph_output <- qgraph::qgraph(
+			melted_table[order(melted_table$Vector_Name),], # Put this in alphabetical order by the 'Vector_Name' column. This way, we can line these names up with the vsize names below.
+			esize = 5,
+			directed = TRUE,
+			theme = "gray",
+			edge.labels = TRUE,
+			shape = "circle",
+			# labels = Labels
+			vsize = list_item_relative_sizes, # Get the size of each list object in the order it appears in the melted table (this is from using 'vsize = c(1,2,3,4,5,6)' and noting that the size increases were in line with the output of 'unique(melted_table$Vector_Name)')
+			minimum = 0,
+			threshold = -1, # Set this lower than 0, to effectively turn it off.
+			DoNotPlot = FALSE
+		)
+		
+		# return(qgraph_output)
+	} else {
+		stop("No 'output_type' selected.") # This shouldn't happen, but just in case it does, we'll throw an error message here.
 	}
 	
 } # End of function definition
 
-generate.table.of.two.way.comparisons.percentage.overlap(veccompare::example.vectors.list)
+summarize.two.way.comparisons.percentage.overlap(veccompare::example.vectors.list)
 
-generate.table.of.two.way.comparisons.percentage.overlap(
+summarize.two.way.comparisons.percentage.overlap(
 	veccompare::example.vectors.list,
+	output_type = "table",
 	melt_table = TRUE
 )
 
-generate.table.of.two.way.comparisons.percentage.overlap(
+summarize.two.way.comparisons.percentage.overlap(
 	veccompare::example.vectors.list,
-	output_table_as_plot = TRUE
+	output_type = "matrix_plot"
 )
 
-
-
-
-
-
-melted_table <- generate.table.of.two.way.comparisons.percentage.overlap(
+summarize.two.way.comparisons.percentage.overlap(
 	veccompare::example.vectors.list,
-	melt_table = TRUE
+	output_type = "network_graph"
 )
-
-# Remove self-directed edges, as they aren't useful for this type of network graph:
-melted_table <- melted_table[
-	melted_table$Vector_Name != melted_table$Overlaps_With
-	, # Use all columns
-]
-
-igraph_object <- graph.data.frame(melted_table, directed = TRUE)
-# We can see that the Decimal percentages are present; we'll use them as weights below:
-# E(igraph_object)$Decimal_Percentage
-
-
-plot.igraph(
-	igraph_object,
-	vertex.label = V(igraph_object)$name,
-	vertex.shape = "square",
-	layout = 
-		# layout.fruchterman.reingold,
-		layout.circle,
-	edge.color = "gray",
-	
-	edge.arrow.size = 0.5,
-	
-	edge.curved = rep(0.2, ecount(igraph_object)),
-	edge.width = E(igraph_object)$Decimal_Percentage*10,
-	vertex.frame.color = "white",
-	vertex.color = "white",
-	vertex.size = 30
-	
-	#, vertex.label.dist = 1
-	#, vertex.label.degree = 180
-)
-
-
-
-library(GGally)
-
-igraph_object %v% "vertex_size" <- sapply(named_list_of_vectors, length)
-
-
-ggnet2(
-	igraph_object,
-	node.color = "black",
-	edge.size = 1,
-	edge.color = "grey",
-	mode = "circle",
-	size = "phono"
-)
-
-
-
-melted_table$Decimal_Percentage[melted_table$Decimal_Percentage == 0] <- .01
-
-list_item_sizes <- sapply(named_list_of_vectors[order(names(named_list_of_vectors))], length)
-list_item_relative_sizes <- list_item_sizes / max(list_item_sizes)*10
-
-qgraph_output <- qgraph::qgraph(
-	melted_table[order(melted_table$Vector_Name),], # Put this in alphabetical order by the 'Vector_Name' column. This way, we can line these names up with the vsize names below.
-	esize = 5,
-	directed = TRUE,
-	theme = "gray",
-	edge.labels = TRUE,
-	shape = "circle",
-	# labels = Labels
-	vsize = list_item_relative_sizes, # Get the size of each list object in the order it appears in the melted table (this is from using 'vsize = c(1,2,3,4,5,6)' and noting that the size increases were in line with the output of 'unique(melted_table$Vector_Name)')
-)
-
-
-
-
-
-
 
