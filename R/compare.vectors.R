@@ -248,9 +248,13 @@ compare.vectors <- function(
 				}
 			}
 
-			message("Drawing only the following degree(s) of comparison, following the options entered by the user: ", veccompare::vector.print.with.and(degrees_of_comparison_for_venn_diagrams[degrees_of_comparison_for_venn_diagrams %in% degrees_of_comparison_to_include]), "...")
+			valid_venn_diagram_degrees_actually_asked_for_by_the_user <- degrees_of_comparison_for_venn_diagrams[degrees_of_comparison_for_venn_diagrams %in% degrees_of_comparison_to_include]
 
-			for(degree_of_comparison in degrees_of_comparison_for_venn_diagrams[degrees_of_comparison_for_venn_diagrams %in% degrees_of_comparison_to_include]){ # The Venn Diagram package can only draw up to 5-way comparisons, so we won't go above 5 when drawing Venn-Diagrams.
+			if(length(valid_venn_diagram_degrees_actually_asked_for_by_the_user) > 0){
+				message("Drawing only the following degree(s) of comparison, following the options entered by the user: ", veccompare::vector.print.with.and(valid_venn_diagram_degrees_actually_asked_for_by_the_user), "...")
+			}
+
+			for(degree_of_comparison in valid_venn_diagram_degrees_actually_asked_for_by_the_user){ # The Venn Diagram package can only draw up to 5-way comparisons, so we won't go above 5 when drawing Venn-Diagrams.
 
 				if(suppress_messages != TRUE){
 					message("Calculating Venn diagram for all ", degree_of_comparison, "-way comparisons...", sep = "")
