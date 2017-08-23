@@ -7,6 +7,7 @@
 #' @param save_venn_diagram_files A logical (TRUE/FALSE) indicator whether to save Venn diagrams as PNG files.
 #' @param location_for_venn_diagram_files An optional string giving a directory into which to save Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}). This location must already exist on the filesystem.
 #' @param prefix_for_venn_diagram_files An optional string giving a prefix to prepend to saved Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}).
+#' @param suppress_messages A logical (TRUE/FALSE) indicator whether to suppress messages. Even if this is \code{TRUE}, warnings will still be printed.
 #'
 #' @return A list, with one object for each comparison of vectors. The list contains the following elements:
 #' \describe{
@@ -58,7 +59,8 @@ compare.vectors <- function(
 	vector_colors_for_venn_diagrams = NULL,
 	save_venn_diagram_files = FALSE,
 	location_for_venn_diagram_files = "",
-	prefix_for_venn_diagram_files = ""
+	prefix_for_venn_diagram_files = "",
+	suppress_messages = FALSE
 ){
 	vector_names <- names(named_list_of_vectors_to_compare)
 
@@ -82,7 +84,7 @@ compare.vectors <- function(
 				degrees_of_comparison_not_asked_for_but_needed_for_diagrams <- degrees_of_comparison_to_include[which(! degrees_of_comparison_to_include %in% degrees_of_comparison_for_venn_diagrams)]
 
 				if(length(degrees_of_comparison_not_asked_for_but_needed_for_diagrams) > 0){
-					message("Note: We need to calculate all combinations of degree(s) ", veccompare::vector.print.with.and(degrees_of_comparison_not_asked_for_but_needed_for_diagrams), " in addition to the degrees you asked for (", veccompare::vector.print.with.and(degrees_of_comparison_to_include), "), in order to draw Venn diagrams. Proceeding with calculating all of those...")
+					warning("Note: We need to calculate all combinations of degree(s) ", veccompare::vector.print.with.and(degrees_of_comparison_not_asked_for_but_needed_for_diagrams), " in addition to the degrees you asked for (", veccompare::vector.print.with.and(degrees_of_comparison_to_include), "), in order to draw Venn diagrams. Proceeding with calculating all of those...")
 				}
 			}
 		} else {
@@ -156,7 +158,9 @@ compare.vectors <- function(
 				, # Use all columns
 			]
 
-			message("Calculating only the following degree(s) of comparison: ", veccompare::vector.print.with.and(degrees_of_comparison_to_include), "...")
+			if(suppress_messages != TRUE){
+				message("Calculating only the following degree(s) of comparison: ", veccompare::vector.print.with.and(degrees_of_comparison_to_include), "...")
+			}
 		}
 	}
 
@@ -229,12 +233,14 @@ compare.vectors <- function(
 
 		if(maximum_degree_of_comparison_calculated >= 2){
 			if(maximum_degree_of_comparison_calculated >= 6){
-				message("Note: We can only draw up to 5-way diagrams. Thus, combinations of greater than 5 degrees (i.e., 6+ - way comparisons) will not be drawn...")
+				warning("Note: We can only draw up to 5-way diagrams. Thus, combinations of greater than 5 degrees (i.e., 6+ - way comparisons) will not be drawn...")
 			}
 
 			for(degree_of_comparison in degrees_of_comparison_for_venn_diagrams){ # The Venn Diagram package can only draw up to 5-way comparisons, so we won't go above 5 when drawing Venn-Diagrams.
 
-				message("Calculating Venn diagram for all ", degree_of_comparison, "-way comparisons...", sep = "")
+				if(suppress_messages != TRUE){
+					message("Calculating Venn diagram for all ", degree_of_comparison, "-way comparisons...", sep = "")
+				}
 
 				combination_set_elements_relevant_for_current_degree_of_comparison <- which(
 					sapply(
@@ -247,7 +253,9 @@ compare.vectors <- function(
 
 					names_of_elements_in_this_comparison_set <- combination_set_operations[[combination_set_element_number]]$elements_involved
 
-					message("Drawing comparison between ", veccompare::vector.print.with.and(names_of_elements_in_this_comparison_set), "...", sep = "")
+					if(suppress_messages != TRUE){
+						message("Drawing comparison between ", veccompare::vector.print.with.and(names_of_elements_in_this_comparison_set), "...", sep = "")
+					}
 
 					if(length(names_of_elements_in_this_comparison_set) == 2){
 						venn_diagram <- VennDiagram::draw.pairwise.venn(
@@ -391,7 +399,9 @@ compare.vectors <- function(
 
 						final_path_for_venn_diagram <- file.path(location_for_venn_diagram_files_to_use, paste(prefix_for_venn_diagram_files_to_use, filename_to_use, sep = ""))
 
-						message("Saving Venn diagram to '", final_path_for_venn_diagram, "'...")
+						if(suppress_messages != TRUE){
+							message("Saving Venn diagram to '", final_path_for_venn_diagram, "'...")
+						}
 
 						ggplot2::ggsave(file = final_path_for_venn_diagram, venn_diagram)
 					} # End of if(save_venn_diagram_files == TRUE)

@@ -20,7 +20,7 @@ summarize.two.way.comparisons.percentage.overlap(named_list_of_vectors,
 \value{
 Either a matrix (if \code{output} is \code{"table"}), or an image (if \code{output} is \code{"matrix_plot"} or \code{"network_graph"}). If an image is printed, nothing is returned by the function; rather, the output is printed immediately.
 
-If \code{output} is \code{"table"} and \code{melt_table} is \code{FALSE}, the output will be a matrix with \code{nrow} and \code{ncol} both equal to the number of vectors in \code{named_list_of_vectors}. This table shows the decimal percentage overlap (e.g., "0.20" = 20\%) between each combination of vectors. \emph{This table is intended to be read with column names first, in this form:} "[column title] overlaps with [row title] [cell value] percent."
+If \code{output} is \code{"table"} and \code{melt_table} is \code{FALSE}, the output will be a matrix with \code{nrow} and \code{ncol} both equal to the number of vectors in \code{named_list_of_vectors}. This table shows the decimal percentage overlap (e.g., "0.20" = 20\%) between each combination of vectors. \emph{This table is intended to be read with column names first, in this form:} "[row title] overlaps with [column title] [cell value] percent."
 
 If \code{output} is \code{"table"} and \code{melt_table} is \code{TRUE}, the output will be a \code{\link[reshape2]{melt}ed} data.frame with three columns: \code{Vector_Name}, \code{Overlaps_With}, and \code{Decimal_Percentage}.
 }

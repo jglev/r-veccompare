@@ -7,7 +7,7 @@
 #'
 #' @return Either a matrix (if \code{output} is \code{"table"}), or an image (if \code{output} is \code{"matrix_plot"} or \code{"network_graph"}). If an image is printed, nothing is returned by the function; rather, the output is printed immediately.
 #'
-#' If \code{output} is \code{"table"} and \code{melt_table} is \code{FALSE}, the output will be a matrix with \code{nrow} and \code{ncol} both equal to the number of vectors in \code{named_list_of_vectors}. This table shows the decimal percentage overlap (e.g., "0.20" = 20\%) between each combination of vectors. \emph{This table is intended to be read with column names first, in this form:} "[column title] overlaps with [row title] [cell value] percent."
+#' If \code{output} is \code{"table"} and \code{melt_table} is \code{FALSE}, the output will be a matrix with \code{nrow} and \code{ncol} both equal to the number of vectors in \code{named_list_of_vectors}. This table shows the decimal percentage overlap (e.g., "0.20" = 20\%) between each combination of vectors. \emph{This table is intended to be read with column names first, in this form:} "[row title] overlaps with [column title] [cell value] percent."
 #'
 #' If \code{output} is \code{"table"} and \code{melt_table} is \code{TRUE}, the output will be a \code{\link[reshape2]{melt}ed} data.frame with three columns: \code{Vector_Name}, \code{Overlaps_With}, and \code{Decimal_Percentage}.
 #'
@@ -48,7 +48,8 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 	# Comput all two-way comparisons:
 	two_way_comparison_output <- veccompare::compare.vectors(
 		named_list_of_vectors,
-		degrees_of_comparison_to_include = 2
+		degrees_of_comparison_to_include = 2,
+		suppress_messages = TRUE,
 	)
 
 	output_table <- matrix( # We'll fill this in below
@@ -68,11 +69,11 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 
 			percent_unique_to_involved_vector <- 1.00 - round(length(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]])/length(unique(named_list_of_vectors[[involved_vector_for_getting_unique_elements]])), 2)
 
-			# We specify row and column in this way because it works correctly with reshape2::melt below. The way to view the output is downward: "[column title] overlaps with [row title] [cell value] percent."
+			# We specify row and column in this way because it works correctly with reshape2::melt below. The way to view the output is across: "[row title] overlaps with [column title] [cell value] percent."
 			output_table[
-				list_element[["elements_involved"]][list_element[["elements_involved"]] != involved_vector_for_getting_unique_elements],
-				involved_vector_for_getting_unique_elements
-				] <- percent_unique_to_involved_vector
+				involved_vector_for_getting_unique_elements,
+				list_element[["elements_involved"]][list_element[["elements_involved"]] != involved_vector_for_getting_unique_elements]
+			] <- percent_unique_to_involved_vector
 
 		} # End of for loop over involved_vector_for_getting_unique_elements
 	} # End of for loop over list_element
@@ -82,16 +83,21 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 
 		message("Drawing plot of table...")
 
-		plot_of_table <- corrplot::corrplot(
+		par(xpd=TRUE)
+
+		corrplot::corrplot(
 			output_table,
 			method="number",
 			is.corr = FALSE,
 			tl.col = "black", # Set title color to black
 			diag = FALSE,
+			order = "alphabet",
 
 			# Widen the legend:
-			cl.ratio=0.2,
-			cl.align="r"
+			cl.ratio = 0.2,
+			cl.align = "r",
+			cl.lim = c(0, 1.0),
+			mar = c(2, 0, 1, 0) # Increase the margins, so that nothing gets cut off at the top and bottom of the plot.
 		)
 
 		# return(plot_of_table)
@@ -119,8 +125,8 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 		list_item_sizes <- sapply(named_list_of_vectors[order(names(named_list_of_vectors))], length)
 		list_item_relative_sizes <- list_item_sizes / max(list_item_sizes)*10
 
-		qgraph_output <- qgraph::qgraph(
-			t(output_table[order(rownames(output_table)), order(colnames(output_table))]), # Transpose (i.e. flip rows and columns of) the output_table. I noticed that this will get the arrows pointing the correct direction in the output network graph. We're also alphabetizing row and column name orders here to more easily match up with the values for the 'nodeNames' argument below.
+		qgraph::qgraph(
+			output_table[order(rownames(output_table)), order(colnames(output_table))], # We're alphabetizing row and column name orders here to more easily match up with the values for the 'nodeNames' argument below.
 			esize = 5,
 			directed = TRUE,
 			theme = "gray",

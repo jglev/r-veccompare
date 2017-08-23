@@ -7,7 +7,8 @@
 compare.vectors(named_list_of_vectors_to_compare,
   degrees_of_comparison_to_include = NULL, draw_venn_diagrams = FALSE,
   vector_colors_for_venn_diagrams = NULL, save_venn_diagram_files = FALSE,
-  location_for_venn_diagram_files = "", prefix_for_venn_diagram_files = "")
+  location_for_venn_diagram_files = "", prefix_for_venn_diagram_files = "",
+  suppress_messages = FALSE)
 }
 \arguments{
 \item{named_list_of_vectors_to_compare}{A named list of vectors to compare (see, for example, \code{\link{example.vectors.list}}). Duplicate values in a given vector will only be counted once (for example, c("a", "a", "b", "c") will be treated identically to c("a", "b", "c").}
@@ -23,6 +24,8 @@ compare.vectors(named_list_of_vectors_to_compare,
 \item{location_for_venn_diagram_files}{An optional string giving a directory into which to save Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}). This location must already exist on the filesystem.}
 
 \item{prefix_for_venn_diagram_files}{An optional string giving a prefix to prepend to saved Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}).}
+
+\item{suppress_messages}{A logical (TRUE/FALSE) indicator whether to suppress messages. Even if this is \code{TRUE}, warnings will still be printed.}
 }
 \value{
 A list, with one object for each comparison of vectors. The list contains the following elements:
