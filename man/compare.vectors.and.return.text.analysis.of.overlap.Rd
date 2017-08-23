@@ -11,7 +11,8 @@
   draw_venn_diagrams = FALSE,
   viewport_npc_width_height_for_venn_diagrams = 1,
   vector_colors_for_venn_diagrams = NULL, save_venn_diagram_files = FALSE,
-  location_for_venn_diagram_files = "", prefix_for_venn_diagram_files = "")
+  location_for_venn_diagram_files = "", prefix_for_venn_diagram_files = "",
+  base_heading_level_to_use = 1)
 }
 \arguments{
 \item{named_list_of_vectors_to_compare}{(As in \code{\link{compare.vectors}}.)}
@@ -31,6 +32,8 @@
 \item{location_for_venn_diagram_files}{(As in \code{\link{compare.vectors}}.)}
 
 \item{prefix_for_venn_diagram_files}{(As in \code{\link{compare.vectors}}.)}
+
+\item{base_heading_level_to_use}{An integer indicating the highest-level heading to print. Defaults to \code{1} (i.e., start by using first-level headings); \code{1} is also the minimum value used.}
 }
 \value{
 A string of Markdown (and Venn diagrams, if \code{draw_venn_diagrams} is \code{TRUE}).

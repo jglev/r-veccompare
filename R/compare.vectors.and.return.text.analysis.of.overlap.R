@@ -12,6 +12,7 @@
 #' @param save_venn_diagram_files (As in \code{\link{compare.vectors}}.)
 #' @param location_for_venn_diagram_files (As in \code{\link{compare.vectors}}.)
 #' @param prefix_for_venn_diagram_files (As in \code{\link{compare.vectors}}.)
+#' @param base_heading_level_to_use An integer indicating the highest-level heading to print. Defaults to \code{1} (i.e., start by using first-level headings); \code{1} is also the minimum value used.
 #'
 #' @return A string of Markdown (and Venn diagrams, if \code{draw_venn_diagrams} is \code{TRUE}).
 #'
@@ -39,8 +40,19 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 	vector_colors_for_venn_diagrams = NULL,
 	save_venn_diagram_files = FALSE,
 	location_for_venn_diagram_files = "",
-	prefix_for_venn_diagram_files = ""
+	prefix_for_venn_diagram_files = "",
+	base_heading_level_to_use = 1
 ){
+
+	if(!is.numeric(base_heading_level_to_use)){
+		stop("'base_heading_level_to_use' is expected to be an integer (for example, 1, 2, 3, etc.).")
+	} else {
+		# If base_heading_level_to_use *is* an integer, round it to the nearest whole number, with a minimum of 1
+		base_heading_level_to_use <- max(round(base_heading_level_to_use, digits = 0), 1)
+
+		# We'll then create a heading prefix for use when creating Markdown below:
+		markdown_base_heading <- paste(rep("#", base_heading_level_to_use), sep = "", collapse = "")
+	}
 
 	# First, we'll escape special Markdown characters:
 	message("Escaping special Markdown characters (_, *, /)...")
@@ -119,7 +131,11 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 
 	for(n_way_comparison in degrees_of_comparisons){
 
-		addition_to_output_markdown <- paste("\n",  "\n# ", n_way_comparison, "-Way Comparisons", sep = "", collapse = "")
+		if(n_way_comparison == 1){
+			addition_to_output_markdown <- paste("\n\n", markdown_base_heading, " Number of Items in Each Element", sep = "", collapse = "")
+		} else {
+			addition_to_output_markdown <- paste("\n\n", markdown_base_heading, " ", n_way_comparison, "-Way Comparisons", sep = "", collapse = "")
+		}
 
 		if(cat_immediately == TRUE){
 			cat(addition_to_output_markdown)
@@ -144,7 +160,8 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 			#
 			addition_to_output_markdown <- paste(
 				"\n\n",
-				"## **",
+				markdown_base_heading,
+				"# **",
 				vector.print.with.and(
 					list_element[["elements_involved"]],
 					string_to_return_if_vector_is_empty = "(None)"),
@@ -220,7 +237,9 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 					percent_unique_to_involved_vector <- round(length(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]])/length(unique(named_list_of_vectors_to_compare[[involved_vector_for_getting_unique_elements]]))*100, 2)
 
 					addition_to_output_markdown <- paste(
-						"\n\n### Elements Unique to ", involved_vector_for_getting_unique_elements,
+						"\n\n",
+						markdown_base_heading,
+						"## Elements Unique to ", involved_vector_for_getting_unique_elements,
 						"\n\nTotal number of elements that are **unique to ",
 						involved_vector_for_getting_unique_elements, ":** ",
 						length(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]]),
