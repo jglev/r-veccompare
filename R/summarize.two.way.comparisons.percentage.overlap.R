@@ -77,14 +77,6 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 		} # End of for loop over involved_vector_for_getting_unique_elements
 	} # End of for loop over list_element
 
-	if(
-		(output_type == "table" & melt_table == TRUE) |
-		output_type == "network_graph"
-	){
-			melted_matrix <- reshape2::melt(as.matrix(output_table))
-			colnames(melted_matrix) <- c("Vector_Name", "Overlaps_With", "Decimal_Percentage")
-	}
-
 	if(output_type == "matrix_plot"){
 		# See https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html for corrplot examples:
 
@@ -105,40 +97,42 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 		# return(plot_of_table)
 	} else if(output_type == "table"){
 		if(melt_table == TRUE){
+			melted_matrix <- reshape2::melt(as.matrix(output_table))
+			colnames(melted_matrix) <- c("Vector_Name", "Overlaps_With", "Decimal_Percentage")
+
+			# Remove self-directed edges, as they aren't really meaningful here:
+			melted_matrix <- melted_matrix[
+				melted_matrix$Vector_Name != melted_matrix$Overlaps_With
+				, # Use all columns
+			]
+
+			rownames(melted_matrix) <- NULL # For aesthetics, remove row numbers.
+
 			return(melted_matrix)
 		} else {
 			return(output_table)
 		}
 	}	else if(output_type == "network_graph") {
-		# Remove self-directed edges, as they aren't useful for this type of network graph:
-		melted_matrix <- melted_matrix[
-			melted_matrix$Vector_Name != melted_matrix$Overlaps_With
-			, # Use all columns
-			]
+
+		message("Drawing network graph...")
 
 		list_item_sizes <- sapply(named_list_of_vectors[order(names(named_list_of_vectors))], length)
 		list_item_relative_sizes <- list_item_sizes / max(list_item_sizes)*10
 
-		message("Drawing network graph...")
-
 		qgraph_output <- qgraph::qgraph(
-			# as.matrix(melted_matrix[order(melted_matrix$Vector_Name),1:2]), # Put this in alphabetical order by the 'Vector_Name' column. This way, we can line these names up with the vsize names below.
-			# output_table, # Transpose (i.e. flip rows and columns of) the output_table. I noticed that this will get the arrows pointing the correct direction in the output network graph.
-			t(output_table[order(rownames(output_table)), order(colnames(output_table))]),
+			t(output_table[order(rownames(output_table)), order(colnames(output_table))]), # Transpose (i.e. flip rows and columns of) the output_table. I noticed that this will get the arrows pointing the correct direction in the output network graph. We're also alphabetizing row and column name orders here to more easily match up with the values for the 'nodeNames' argument below.
 			esize = 5,
 			directed = TRUE,
 			theme = "gray",
 			edge.labels = TRUE,
 			shape = "circle",
-			#vsize = list_item_relative_sizes, # Get the size of each list object in the order it appears in the melted table (this is from using 'vsize = c(1,2,3,4,5,6)' and noting that the size increases were in line with the output of 'unique(melted_matrix$Vector_Name)')
+			vsize = list_item_relative_sizes, # Get the size of each list object in the order it appears in the melted table (this is from using 'vsize = c(1,2,3,4,5,6)' and noting that the size increases were in line with the output of 'unique(melted_matrix$Vector_Name)')
 			minimum = network_graph_minimum,
 			threshold = -1, # Set this lower than 0, to effectively turn it off.
 			DoNotPlot = FALSE,
 
 			legend = TRUE,
-			# labels = FALSE,
 			labels = c(1:length(named_list_of_vectors)), # names(named_list_of_vectors)[order(names(named_list_of_vectors))], # Note: There seems to be a bug with this package when using an edge list and this option, which is why I'm using output_table here above.
-			labels = TRUE,
 			label.scale = TRUE,
 			label.scale.equal = FALSE,
 			label.cex = 2,
