@@ -270,8 +270,8 @@ compare.vectors <- function(
 							cat.dist = rep(0.025, 2), # Category names' distances from the edges of the circles (can be negative)
 							scaled = TRUE,
 							margin = 0,
-							cex = rep(1.5, 3),
-							cat.cex = rep(1.5, 2),
+							cex = rep(1.0, 3),
+							cat.cex = rep(1.0, 2),
 							ind = FALSE # Do not automatically draw the diagram
 						)
 					} else if(length(names_of_elements_in_this_comparison_set) == 3){
@@ -287,12 +287,12 @@ compare.vectors <- function(
 							#lty = rep("blank", 3), # Line dash pattern of the circles
 							fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
 							alpha = rep(0.5, 3),
-							cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
+							cat.pos = c(315, 45, 180), # Category position around the circles (in degrees)
 							cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
 							scaled = TRUE,
 							margin = 0,
-							cex = rep(1.5, 7),
-							cat.cex = rep(1.5, 3),
+							cex = rep(1.0, 7),
+							cat.cex = rep(1.0, 3),
 							ind = FALSE # Do not automatically draw the diagram
 						)
 					} else if(length(names_of_elements_in_this_comparison_set) == 4){
@@ -320,8 +320,8 @@ compare.vectors <- function(
 							#cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
 							scaled = TRUE,
 							margin = 0,
-							cex = rep(1.5, 15),
-							cat.cex = rep(1.5, 4),
+							cex = rep(1.0, 15),
+							cat.cex = rep(1.0, 4),
 							ind = FALSE # Do not automatically draw the diagram
 						)
 					} else if(length(names_of_elements_in_this_comparison_set) == 5){
@@ -365,8 +365,8 @@ compare.vectors <- function(
 							#cat.dist = rep(0.025, 3), # Category names' distances from the edges of the circles (can be negative)
 							scaled = TRUE,
 							margin = 0,
-							cex = rep(1.5, 31),
-							cat.cex = rep(1.5, 5),
+							cex = rep(1.0, 31),
+							cat.cex = rep(1.0, 5),
 							ind = FALSE # Do not automatically draw the diagram
 						)
 					} # End of if statement over length of elements

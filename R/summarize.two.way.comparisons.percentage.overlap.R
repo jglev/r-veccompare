@@ -138,6 +138,8 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 			threshold = -1, # Set this lower than 0, to effectively turn it off.
 			DoNotPlot = FALSE,
 
+			# layout = "circle",
+
 			legend = TRUE,
 			labels = c(1:length(named_list_of_vectors)), # names(named_list_of_vectors)[order(names(named_list_of_vectors))], # Note: There seems to be a bug with this package when using an edge list and this option, which is why I'm using output_table here above.
 			label.scale = TRUE,
@@ -145,7 +147,9 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 			label.cex = 2,
 			#groups = names(named_list_of_vectors)[order(names(named_list_of_vectors))], # Cause the nodes to be colored based on their names.
 
-			nodeNames = names(named_list_of_vectors)[order(names(named_list_of_vectors))]
+			nodeNames = names(named_list_of_vectors)[order(names(named_list_of_vectors))],
+			legend.cex = 0.3,
+			mar = c(3, 3, 3, 0.5) # Margins (for the plot, not the legend): c(bottom, left, top, right)
 		)
 
 		# return(qgraph_output)
