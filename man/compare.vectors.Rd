@@ -43,6 +43,7 @@ To compile this list object into a Markdown report, use \code{\link{compare.vect
 Compare all combinations of vectors using set operations
 }
 \examples{
+example <- veccompare::compare.vectors(veccompare::example.vectors.list)
 
 # One can extract similar elements across list items using the \\code{purrr} package:
 purrr::map(example, "elements_involved")

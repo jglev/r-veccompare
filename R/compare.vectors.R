@@ -22,7 +22,7 @@
 #' @export
 #'
 #' @examples
-# example <- veccompare::compare.vectors(veccompare::example.vectors.list)
+#' example <- veccompare::compare.vectors(veccompare::example.vectors.list)
 #'
 #' # One can extract similar elements across list items using the \code{purrr} package:
 #' purrr::map(example, "elements_involved")
@@ -64,6 +64,9 @@ compare.vectors <- function(
 ){
 	vector_names <- names(named_list_of_vectors_to_compare)
 
+	degrees_of_comparison_to_include_after_figuring_venn_diagrams <- degrees_of_comparison_to_include # We'll update this as necessary as we go below.
+	degrees_of_comparison_for_venn_diagrams <- NULL # We'll also update this as necessary as we go below.
+
 	# If we're generating Venn diagrams, we'll create a consistent color to use for each vector:
 	if(draw_venn_diagrams == TRUE){
 
@@ -71,23 +74,28 @@ compare.vectors <- function(
 		# Figure out which degrees of comparison we need to calculate, especially if we're to draw Venn diagrams (which will require that, e.g., if we're drawing a 5-way comparison, we've also calculated all of the 1- to 4-way comparisons)
 		if(!is.null(degrees_of_comparison_to_include)){
 			maximum_degree_of_comparison_calculated <- max(degrees_of_comparison_to_include)
+			minimum_degree_of_comparison_calculated <- min(degrees_of_comparison_to_include)
 
-			if(draw_venn_diagrams == TRUE & maximum_degree_of_comparison_calculated >= 2){
-				degrees_of_comparison_for_venn_diagrams <- degrees_of_comparison_to_include
+			if(draw_venn_diagrams == TRUE & maximum_degree_of_comparison_calculated >= 2 & minimum_degree_of_comparison_calculated <= 5){
 
-				degrees_of_comparison_to_include <- seq(
+				degrees_of_comparison_for_venn_diagrams <- seq(
 					from = 2,
 					to = min(maximum_degree_of_comparison_calculated, 5) # We can only draw up to 5-way comparisons
 				)
 
+				degrees_of_comparison_to_include_after_figuring_venn_diagrams <- union(degrees_of_comparison_to_include, degrees_of_comparison_for_venn_diagrams)
+				degrees_of_comparison_to_include_after_figuring_venn_diagrams <- degrees_of_comparison_to_include_after_figuring_venn_diagrams[order(degrees_of_comparison_to_include_after_figuring_venn_diagrams)]
+
 				# Tell the user if there are elements that need to be computed in order to draw Venn diagrams but that weren't asked for:
-				degrees_of_comparison_not_asked_for_but_needed_for_diagrams <- degrees_of_comparison_to_include[which(! degrees_of_comparison_to_include %in% degrees_of_comparison_for_venn_diagrams)]
+				degrees_of_comparison_not_asked_for_but_needed_for_diagrams <- degrees_of_comparison_for_venn_diagrams[which(! degrees_of_comparison_for_venn_diagrams %in% degrees_of_comparison_to_include)]
 
 				if(length(degrees_of_comparison_not_asked_for_but_needed_for_diagrams) > 0){
-					warning("Note: We need to calculate all combinations of degree(s) ", veccompare::vector.print.with.and(degrees_of_comparison_not_asked_for_but_needed_for_diagrams), " in addition to the degrees you asked for (", veccompare::vector.print.with.and(degrees_of_comparison_to_include), "), in order to draw Venn diagrams. Proceeding with calculating all of those...")
+					if(suppress_messages != TRUE){
+						message("Note: We need to calculate all combinations of degree(s) ", veccompare::vector.print.with.and(degrees_of_comparison_not_asked_for_but_needed_for_diagrams), " in addition to the degrees you asked for (", veccompare::vector.print.with.and(degrees_of_comparison_to_include), "), in order to draw Venn diagrams. Proceeding with calculating all of those...")
+					}
 				}
 			}
-		} else {
+		} else { # If degrees_of_comparison_to_include IS NULL:
 			maximum_degree_of_comparison_calculated <- length(named_list_of_vectors_to_compare)
 
 			if(draw_venn_diagrams == TRUE & maximum_degree_of_comparison_calculated >= 2){
@@ -97,17 +105,19 @@ compare.vectors <- function(
 
 		# Generate Venn diagram colors ------------------------
 
-		if(!is.null(vector_colors_for_venn_diagrams)){
-			if(length(vector_colors_for_venn_diagrams) != length(vector_names)){
-				stop("The number of colors for Venn diagrams (", length(vector_colors_for_venn_diagrams), ") does not match the number of vectors we are comparing (", length(vector_names), ").")
-			} else {
-				vector_colors <- as.list(vector_colors_for_venn_diagrams)
+		if(length(degrees_of_comparison_for_venn_diagrams) > 0){
+			if(!is.null(vector_colors_for_venn_diagrams)){
+				if(length(vector_colors_for_venn_diagrams) != length(vector_names)){
+					stop("The number of colors for Venn diagrams (", length(vector_colors_for_venn_diagrams), ") does not match the number of vectors we are comparing (", length(vector_names), ").")
+				} else {
+					vector_colors <- as.list(vector_colors_for_venn_diagrams)
+					names(vector_colors) <- vector_names
+				}
+			} else { # If we've not been given colors to use, we'll generate random ones:
+				vector_colors <- as.list(veccompare:::generate.random.colors(length(vector_names)))
 				names(vector_colors) <- vector_names
 			}
-		} else { # If we've not been given colors to use, we'll generate random ones:
-			vector_colors <- as.list(veccompare:::generate.random.colors(length(vector_names)))
-			names(vector_colors) <- vector_names
-		}
+		} # End of if length(degrees_of_comparison_for_venn_diagrams) > 0
 	} # End of if draw_venn_diagrams == TRUE
 
 	combinations_of_vector_names <- as.data.frame(
@@ -152,14 +162,14 @@ compare.vectors <- function(
 					apply(
 						combinations_of_vector_names_chunked_for_unique_items,
 						1, # Iterate over rows
-						function(x){length(unique(x)) %in% degrees_of_comparison_to_include}
+						function(x){length(unique(x)) %in% degrees_of_comparison_to_include_after_figuring_venn_diagrams}
 					)
 				)
 				, # Use all columns
 			]
 
 			if(suppress_messages != TRUE){
-				message("Calculating only the following degree(s) of comparison: ", veccompare::vector.print.with.and(degrees_of_comparison_to_include), "...")
+				message("Calculating only the following degree(s) of comparison: ", veccompare::vector.print.with.and(degrees_of_comparison_to_include_after_figuring_venn_diagrams), "...")
 			}
 		}
 	}
@@ -233,10 +243,14 @@ compare.vectors <- function(
 
 		if(maximum_degree_of_comparison_calculated >= 2){
 			if(maximum_degree_of_comparison_calculated >= 6){
-				warning("Note: We can only draw up to 5-way diagrams. Thus, combinations of greater than 5 degrees (i.e., 6+ - way comparisons) will not be drawn...")
+				if(suppress_messages != TRUE){
+					message("Note: We can only draw up to 5-way diagrams. Thus, combinations of greater than 5 degrees (i.e., 6+ - way comparisons) will not be drawn...")
+				}
 			}
 
-			for(degree_of_comparison in degrees_of_comparison_for_venn_diagrams){ # The Venn Diagram package can only draw up to 5-way comparisons, so we won't go above 5 when drawing Venn-Diagrams.
+			message("Drawing only the following degree(s) of comparison, following the options entered by the user: ", veccompare::vector.print.with.and(degrees_of_comparison_for_venn_diagrams[degrees_of_comparison_for_venn_diagrams %in% degrees_of_comparison_to_include]), "...")
+
+			for(degree_of_comparison in degrees_of_comparison_for_venn_diagrams[degrees_of_comparison_for_venn_diagrams %in% degrees_of_comparison_to_include]){ # The Venn Diagram package can only draw up to 5-way comparisons, so we won't go above 5 when drawing Venn-Diagrams.
 
 				if(suppress_messages != TRUE){
 					message("Calculating Venn diagram for all ", degree_of_comparison, "-way comparisons...", sep = "")
@@ -263,7 +277,7 @@ compare.vectors <- function(
 							area2 = length(unique(named_list_of_vectors_to_compare[[names_of_elements_in_this_comparison_set[2]]])),
 							cross.area = length(combination_set_operations[[combination_set_element_number]]$overlap_of_elements),
 							category = names_of_elements_in_this_comparison_set,
-							# lty = rep("blank", 2), # Line dash pattern of the circles
+							lty = rep("blank", 2), # Line dash pattern of the circles
 							fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
 							alpha = rep(0.5, 2),
 							cat.pos = rep(0, 2), # Category position around the circles (in degrees)
@@ -284,7 +298,7 @@ compare.vectors <- function(
 							n13 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[3]),
 							n123 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3]),
 							category = names_of_elements_in_this_comparison_set,
-							#lty = rep("blank", 3), # Line dash pattern of the circles
+							lty = rep("blank", 3), # Line dash pattern of the circles
 							fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
 							alpha = rep(0.5, 3),
 							cat.pos = c(315, 45, 180), # Category position around the circles (in degrees)
@@ -313,7 +327,7 @@ compare.vectors <- function(
 							n234 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
 							n1234 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4]),
 							category = names_of_elements_in_this_comparison_set,
-							# lty = rep("blank", 4), # Line dash pattern of the circles
+							lty = rep("blank", 4), # Line dash pattern of the circles
 							fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
 							alpha = rep(0.5, 4),
 							#cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
@@ -358,7 +372,7 @@ compare.vectors <- function(
 							n2345 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
 							n12345 = get_overlap_of_elements_from_combination_set_operations(names_of_elements_in_this_comparison_set[1], names_of_elements_in_this_comparison_set[2], names_of_elements_in_this_comparison_set[3], names_of_elements_in_this_comparison_set[4], names_of_elements_in_this_comparison_set[5]),
 							category = names_of_elements_in_this_comparison_set,
-							# lty = rep("blank", 5), # Line dash pattern of the circles
+							lty = rep("blank", 5), # Line dash pattern of the circles
 							fill = unlist(vector_colors[names_of_elements_in_this_comparison_set]),
 							alpha = rep(0.5, 5),
 							#cat.pos = c(0, 0, 180), # Category position around the circles (in degrees)
