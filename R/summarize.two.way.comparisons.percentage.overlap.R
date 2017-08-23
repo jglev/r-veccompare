@@ -123,7 +123,7 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 
 		qgraph_output <- qgraph::qgraph(
 			# as.matrix(melted_matrix[order(melted_matrix$Vector_Name),1:2]), # Put this in alphabetical order by the 'Vector_Name' column. This way, we can line these names up with the vsize names below.
-			output_table,
+			t(output_table), # Transpose the output_table from above. I noticed that this will get the arrows pointing the correct direction in the output network graph.
 			esize = 5,
 			directed = TRUE,
 			theme = "gray",
