@@ -123,25 +123,25 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 
 		qgraph_output <- qgraph::qgraph(
 			# as.matrix(melted_matrix[order(melted_matrix$Vector_Name),1:2]), # Put this in alphabetical order by the 'Vector_Name' column. This way, we can line these names up with the vsize names below.
-			t(output_table), # Transpose the output_table from above. I noticed that this will get the arrows pointing the correct direction in the output network graph.
+			# output_table, # Transpose (i.e. flip rows and columns of) the output_table. I noticed that this will get the arrows pointing the correct direction in the output network graph.
+			t(output_table[order(rownames(output_table)), order(colnames(output_table))]),
 			esize = 5,
 			directed = TRUE,
 			theme = "gray",
 			edge.labels = TRUE,
 			shape = "circle",
-			# labels = Labels
-			vsize = list_item_relative_sizes, # Get the size of each list object in the order it appears in the melted table (this is from using 'vsize = c(1,2,3,4,5,6)' and noting that the size increases were in line with the output of 'unique(melted_matrix$Vector_Name)')
+			#vsize = list_item_relative_sizes, # Get the size of each list object in the order it appears in the melted table (this is from using 'vsize = c(1,2,3,4,5,6)' and noting that the size increases were in line with the output of 'unique(melted_matrix$Vector_Name)')
 			minimum = network_graph_minimum,
 			threshold = -1, # Set this lower than 0, to effectively turn it off.
 			DoNotPlot = FALSE,
 
 			legend = TRUE,
 			# labels = FALSE,
-			labels = c(1:length(named_list_of_vectors)), # names(named_list_of_vectors)[order(names(named_list_of_vectors))],
+			labels = c(1:length(named_list_of_vectors)), # names(named_list_of_vectors)[order(names(named_list_of_vectors))], # Note: There seems to be a bug with this package when using an edge list and this option, which is why I'm using output_table here above.
+			labels = TRUE,
 			label.scale = TRUE,
 			label.scale.equal = FALSE,
 			label.cex = 2,
-				#labels = c("a"), # as.character(seq(1:length(named_list_of_vectors))), # There currently seems to be a bug with using this option (whether with "a" or something more substantive, including a vector like 'names(named_list_of_vectors)[order(names(named_list_of_vectors))]').
 			#groups = names(named_list_of_vectors)[order(names(named_list_of_vectors))], # Cause the nodes to be colored based on their names.
 
 			nodeNames = names(named_list_of_vectors)[order(names(named_list_of_vectors))]
