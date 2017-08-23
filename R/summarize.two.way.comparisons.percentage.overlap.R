@@ -97,6 +97,7 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 			cl.ratio = 0.2,
 			cl.align = "r",
 			cl.lim = c(0, 1.0),
+			tl.cex = 0.8, # Title font size ratio.
 			mar = c(2, 0, 1, 0) # Increase the margins, so that nothing gets cut off at the top and bottom of the plot.
 		)
 
