@@ -13,7 +13,7 @@ generate.random.colors(number_of_colors_to_get)
 A vector of R color names.
 }
 \description{
-An internal function to generate a given number of random colors.
+An function to generate a given number of random colors.
 }
 \examples{
 generate.random.colors(5)

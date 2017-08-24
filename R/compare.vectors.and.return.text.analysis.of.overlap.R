@@ -86,6 +86,8 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 
 		if(!is.numeric(viewport_npc_width_height_for_images)){
 			stop("'viewport_npc_width_height_for_images' is expected to be numeric (e.g., 1.0, 0.5, etc.).")
+		} else {
+			viewport_npc_width_height_for_images_value <- viewport_npc_width_height_for_images
 		}
 	} else {
 		draw_venn_diagrams_value <- FALSE
@@ -176,7 +178,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 					cat("\n\n")
 					veccompare::render.venn.diagram(
 						list_element[["venn_diagram"]],
-						viewport_npc_width_height_to_force = viewport_npc_width_height_for_images
+						viewport_npc_width_height_for_images = viewport_npc_width_height_for_images_value
 					)
 					cat("\n\n")
 				}

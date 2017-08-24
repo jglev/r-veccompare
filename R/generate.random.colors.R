@@ -1,6 +1,6 @@
 #' Generate Random Colors
 #'
-#' An internal function to generate a given number of random colors.
+#' An function to generate a given number of random colors.
 #'
 #' @param number_of_colors_to_get The number of colors to generate.
 #'
