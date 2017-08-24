@@ -114,7 +114,7 @@ compare.vectors <- function(
 					names(vector_colors) <- vector_names
 				}
 			} else { # If we've not been given colors to use, we'll generate random ones:
-				vector_colors <- as.list(veccompare:::generate.random.colors(length(vector_names)))
+				vector_colors <- as.list(veccompare::generate.random.colors(length(vector_names)))
 				names(vector_colors) <- vector_names
 			}
 		} # End of if length(degrees_of_comparison_for_venn_diagrams) > 0

@@ -11,4 +11,11 @@
 #' An RMarkdown template illustrating several of \pkg{veccompare}'s features can be used from within RStudio by clicking \code{File -> New File -> R Markdown... -> From Template -> Veccompare Overlap Report}.
 #'
 #' \pkg{veccompare} also provides a function, \code{\link{summarize.two.way.comparisons.percentage.overlap}}, that can create correlation-plot-style images and network graphs for all two-way comparisons between vectors. This function is also demonstrated in the \code{Veccompare Overlap Report} described above.
+#'
+# The below were recommended after using Ctrl + Shift + E in RStudio to do CRAN-like checks on the package.
+#' @importFrom "grDevices" "colors"
+#' @importFrom "graphics" "par"
+#' @importFrom "stats" "runif"
+#' @importFrom "utils" "head"
+#' @importFrom "utils" "tail"
 "_PACKAGE"

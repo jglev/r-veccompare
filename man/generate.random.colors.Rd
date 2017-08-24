@@ -16,5 +16,5 @@ A vector of R color names.
 An internal function to generate a given number of random colors.
 }
 \examples{
-generate_random_colors(5)
+generate.random.colors(5)
 }

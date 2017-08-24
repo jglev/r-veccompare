@@ -2,6 +2,12 @@
 
 export(compare.vectors)
 export(compare.vectors.and.return.text.analysis.of.overlap)
+export(generate.random.colors)
 export(render.venn.diagram)
 export(summarize.two.way.comparisons.percentage.overlap)
 export(vector.print.with.and)
+importFrom("grDevices","colors")
+importFrom("graphics","par")
+importFrom("stats","runif")
+importFrom("utils","head")
+importFrom("utils","tail")
