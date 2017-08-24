@@ -10,8 +10,12 @@ License: All Rights Reserved
 Encoding: UTF-8
 LazyData: true
 Imports:
+		corrplot,
+		ggplot2,
     gtools,
     grid,
     purrr,
+    reshape2,
+    qgraph,
     VennDiagram
 RoxygenNote: 6.0.1
