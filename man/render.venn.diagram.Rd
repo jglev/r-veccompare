@@ -5,12 +5,12 @@
 \title{Render (Print) a Previously-Computed Venn Diagram}
 \usage{
 render.venn.diagram(venn_diagram_created_with_VennDiagram_package,
-  viewport_npc_width_height_to_force = 1)
+  viewport_npc_width_height_for_images = 1)
 }
 \arguments{
 \item{venn_diagram_created_with_VennDiagram_package}{A grid-based diagram object. For example, a Venn diagram previously generated using \code{veccompare::compare.vectors()}.}
 
-\item{viewport_npc_width_height_to_force}{The scale at which to print the image. If the image is cut off at its edges, for example, this can be set lower than 1.0.}
+\item{viewport_npc_width_height_for_images}{The scale at which to print an image. If the image is cut off at its edges, for example, this can be set lower than 1.0.}
 }
 \value{
 The function will not return a value; rather, it will print the image.

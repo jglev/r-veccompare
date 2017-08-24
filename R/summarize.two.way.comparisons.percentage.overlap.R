@@ -7,7 +7,7 @@
 #'
 #' @return Either a matrix (if \code{output} is \code{"table"}), or an image (if \code{output} is \code{"matrix_plot"} or \code{"network_graph"}). If an image is printed, nothing is returned by the function; rather, the output is printed immediately.
 #'
-#' If \code{output} is \code{"table"} and \code{melt_table} is \code{FALSE}, the output will be a matrix with \code{nrow} and \code{ncol} both equal to the number of vectors in \code{named_list_of_vectors}. This table shows the decimal percentage overlap (e.g., "0.20" = 20\%) between each combination of vectors. \emph{This table is intended to be read with row names first, in this form:} "[row title] overlaps with [column title] [cell value] percent."
+#' If \code{output} is \code{"table"} and \code{melt_table} is \code{FALSE}, the output will be a matrix with \code{nrow} and \code{ncol} both equal to the number of vectors in \code{named_list_of_vectors_to_compare}. This table shows the decimal percentage overlap (e.g., "0.20" = 20\%) between each combination of vectors. \emph{This table is intended to be read with row names first, in this form:} "[row title] overlaps with [column title] [cell value] percent."
 #'
 #' If \code{output} is \code{"table"} and \code{melt_table} is \code{TRUE}, the output will be a \code{\link[reshape2]{melt}ed} data.frame with three columns: \code{Vector_Name}, \code{Overlaps_With}, and \code{Decimal_Percentage}.
 #'
@@ -31,7 +31,7 @@
 #' 	output_type = "network_graph"
 #' )
 summarize.two.way.comparisons.percentage.overlap <- function(
-	named_list_of_vectors,
+	named_list_of_vectors_to_compare,
 	output_type = "table", # c("table", "matrix_plot", "network_graph")
 	melt_table = FALSE, # Overridden by output_type
 	network_graph_minimum = 0
@@ -47,27 +47,27 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 
 	# Comput all two-way comparisons:
 	two_way_comparison_output <- veccompare::compare.vectors(
-		named_list_of_vectors,
+		named_list_of_vectors_to_compare,
 		degrees_of_comparison_to_include = 2,
 		suppress_messages = TRUE,
 	)
 
 	output_table <- matrix( # We'll fill this in below
-		nrow = length(named_list_of_vectors),
-		ncol = length(named_list_of_vectors)
+		nrow = length(named_list_of_vectors_to_compare),
+		ncol = length(named_list_of_vectors_to_compare)
 	)
 
 	# Set the diagonal to 1, since every element overlaps 100% with itself
 	diag(output_table) <- 1.00
 
-	rownames(output_table) <- names(named_list_of_vectors)
-	colnames(output_table) <- names(named_list_of_vectors)
+	rownames(output_table) <- names(named_list_of_vectors_to_compare)
+	colnames(output_table) <- names(named_list_of_vectors_to_compare)
 
 	for(list_element in two_way_comparison_output){
 
 		for(involved_vector_for_getting_unique_elements in list_element[["elements_involved"]]){
 
-			percent_unique_to_involved_vector <- 1.00 - round(length(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]])/length(unique(named_list_of_vectors[[involved_vector_for_getting_unique_elements]])), 2)
+			percent_unique_to_involved_vector <- 1.00 - round(length(list_element[["elements_unique_to_first_element"]][[involved_vector_for_getting_unique_elements]])/length(unique(named_list_of_vectors_to_compare[[involved_vector_for_getting_unique_elements]])), 2)
 
 			# We specify row and column in this way because it works correctly with reshape2::melt below. The way to view the output is across: "[row title] overlaps with [column title] [cell value] percent."
 			output_table[
@@ -123,7 +123,7 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 
 		message("Drawing network graph...")
 
-		list_item_sizes <- sapply(named_list_of_vectors[order(names(named_list_of_vectors))], length)
+		list_item_sizes <- sapply(named_list_of_vectors_to_compare[order(names(named_list_of_vectors_to_compare))], length)
 		list_item_relative_sizes <- list_item_sizes / max(list_item_sizes)*10
 
 		qgraph::qgraph(
@@ -141,13 +141,13 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 			# layout = "circle",
 
 			legend = TRUE,
-			labels = c(1:length(named_list_of_vectors)), # names(named_list_of_vectors)[order(names(named_list_of_vectors))], # Note: There seems to be a bug with this package when using an edge list and this option, which is why I'm using output_table here above.
+			labels = c(1:length(named_list_of_vectors_to_compare)), # names(named_list_of_vectors_to_compare)[order(names(named_list_of_vectors_to_compare))], # Note: There seems to be a bug with this package when using an edge list and this option, which is why I'm using output_table here above.
 			label.scale = TRUE,
 			label.scale.equal = FALSE,
 			label.cex = 2,
-			#groups = names(named_list_of_vectors)[order(names(named_list_of_vectors))], # Cause the nodes to be colored based on their names.
+			#groups = names(named_list_of_vectors_to_compare)[order(names(named_list_of_vectors_to_compare))], # Cause the nodes to be colored based on their names.
 
-			nodeNames = names(named_list_of_vectors)[order(names(named_list_of_vectors))],
+			nodeNames = names(named_list_of_vectors_to_compare)[order(names(named_list_of_vectors_to_compare))],
 			legend.cex = 0.3,
 			mar = c(3, 3, 3, 0.5) # Margins (for the plot, not the legend): c(bottom, left, top, right)
 		)

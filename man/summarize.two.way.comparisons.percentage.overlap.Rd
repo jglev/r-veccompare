@@ -5,10 +5,13 @@
 \alias{summarize.two.way.comparisons.percentage.overlap}
 \title{Summarize Percentage Overlap for Two-Way Comparisons between Vectors}
 \usage{
-summarize.two.way.comparisons.percentage.overlap(named_list_of_vectors,
+
+  summarize.two.way.comparisons.percentage.overlap(named_list_of_vectors_to_compare,
   output_type = "table", melt_table = FALSE, network_graph_minimum = 0)
 }
 \arguments{
+\item{named_list_of_vectors_to_compare}{A named list of vectors to compare (see, for example, \code{\link{example.vectors.list}}). Duplicate values in a given vector will only be counted once (for example, c("a", "a", "b", "c") will be treated identically to c("a", "b", "c").}
+
 \item{output_type}{Either \code{"table"}, \code{"matrix_plot"}, or \code{"network_graph"}. \code{"table"} will return a matrix showing percentage overlap between each pair of vectors. \code{"matrix_plot"} will plot this table, coloring it by the amount of overlap. \code{"network_graph"} will return a network graph image illustrating the overlap percentages between each pair of vectors.}
 
 \item{melt_table}{A logical (TRUE/FALSE) indicator, when \code{output_type} is \code{"table"}, whether to print the output in \code{\link[reshape2]{melt}ed} form (using the \pkg{reshape2} package).}
@@ -18,7 +21,7 @@ summarize.two.way.comparisons.percentage.overlap(named_list_of_vectors,
 \value{
 Either a matrix (if \code{output} is \code{"table"}), or an image (if \code{output} is \code{"matrix_plot"} or \code{"network_graph"}). If an image is printed, nothing is returned by the function; rather, the output is printed immediately.
 
-If \code{output} is \code{"table"} and \code{melt_table} is \code{FALSE}, the output will be a matrix with \code{nrow} and \code{ncol} both equal to the number of vectors in \code{named_list_of_vectors}. This table shows the decimal percentage overlap (e.g., "0.20" = 20\%) between each combination of vectors. \emph{This table is intended to be read with row names first, in this form:} "[row title] overlaps with [column title] [cell value] percent."
+If \code{output} is \code{"table"} and \code{melt_table} is \code{FALSE}, the output will be a matrix with \code{nrow} and \code{ncol} both equal to the number of vectors in \code{named_list_of_vectors_to_compare}. This table shows the decimal percentage overlap (e.g., "0.20" = 20\%) between each combination of vectors. \emph{This table is intended to be read with row names first, in this form:} "[row title] overlaps with [column title] [cell value] percent."
 
 If \code{output} is \code{"table"} and \code{melt_table} is \code{TRUE}, the output will be a \code{\link[reshape2]{melt}ed} data.frame with three columns: \code{Vector_Name}, \code{Overlaps_With}, and \code{Decimal_Percentage}.
 }

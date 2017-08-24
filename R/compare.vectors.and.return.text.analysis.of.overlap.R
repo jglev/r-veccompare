@@ -4,6 +4,7 @@
 #'
 #' Use of this function is illustrated with the \code{Veccompare Overlap Report} RMarkdown template for RStudio that is installed as part of the \pkg{veccompare} package.
 #' @inheritParams compare.vectors
+#' @inheritParams render.venn.diagram
 #' @param cat_immediately A logical (TRUE/FALSE) indicator whether to immediately print the output, as in an RMarkdown document.
 #' @param base_heading_level_to_use An integer indicating the highest-level heading to print. Defaults to \code{1} (i.e., start by using first-level headings); \code{1} is also the minimum value used.
 #'
@@ -29,7 +30,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 	degrees_of_comparison_to_include = NULL, # By default, all degrees of comparison will be included (e.g., for three vectors, all 1-, 2-, and 3-way comparisons). If you only want to include 2- and 3-way comparisons, for example, you can use 'c(2, 3)' here.
 	cat_immediately = FALSE, # Whether to immediately print to the console using cat(). This needs to be true if venn diagrams are to be drawn.
 	draw_venn_diagrams = FALSE, # Whether we shold draw venn digrams for 2- to 5-way comparisons (the VennDiagram package can only draw up to five-way comparisons).
-	viewport_npc_width_height_for_venn_diagrams = 1.0,
+	viewport_npc_width_height_for_images = 1.0,
 	vector_colors_for_venn_diagrams = NULL,
 	save_venn_diagram_files = FALSE,
 	location_for_venn_diagram_files = "",
@@ -83,8 +84,8 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 			vector_colors_for_venn_diagrams_value <- NULL
 		}
 
-		if(!is.numeric(viewport_npc_width_height_for_venn_diagrams)){
-			stop("'viewport_npc_width_height_for_venn_diagrams' is expected to be numeric (e.g., 1.0, 0.5, etc.).")
+		if(!is.numeric(viewport_npc_width_height_for_images)){
+			stop("'viewport_npc_width_height_for_images' is expected to be numeric (e.g., 1.0, 0.5, etc.).")
 		}
 	} else {
 		draw_venn_diagrams_value <- FALSE
@@ -175,7 +176,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 					cat("\n\n")
 					veccompare::render.venn.diagram(
 						list_element[["venn_diagram"]],
-						viewport_npc_width_height_to_force = viewport_npc_width_height_for_venn_diagrams
+						viewport_npc_width_height_to_force = viewport_npc_width_height_for_images
 					)
 					cat("\n\n")
 				}

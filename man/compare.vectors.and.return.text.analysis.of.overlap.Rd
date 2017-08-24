@@ -8,8 +8,7 @@
 
   compare.vectors.and.return.text.analysis.of.overlap(named_list_of_vectors_to_compare,
   degrees_of_comparison_to_include = NULL, cat_immediately = FALSE,
-  draw_venn_diagrams = FALSE,
-  viewport_npc_width_height_for_venn_diagrams = 1,
+  draw_venn_diagrams = FALSE, viewport_npc_width_height_for_images = 1,
   vector_colors_for_venn_diagrams = NULL, save_venn_diagram_files = FALSE,
   location_for_venn_diagram_files = "", prefix_for_venn_diagram_files = "",
   base_heading_level_to_use = 1)
@@ -22,6 +21,8 @@
 \item{cat_immediately}{A logical (TRUE/FALSE) indicator whether to immediately print the output, as in an RMarkdown document.}
 
 \item{draw_venn_diagrams}{A logical (TRUE/FALSE) indicator whether to draw Venn diagrams for all 2- through 5-way comparisons of vectors.}
+
+\item{viewport_npc_width_height_for_images}{The scale at which to print an image. If the image is cut off at its edges, for example, this can be set lower than 1.0.}
 
 \item{vector_colors_for_venn_diagrams}{An optional vector of color names for Venn diagrams (if \code{draw_venn_diagrams} is \code{TRUE}). Color names are applied to the named vectors in \code{named_list_of_vectors_to_compare} in their order in \code{named_list_of_vectors_to_compare}. If this is blank, a random color will be selected for each vector. Either way, each vector will have a consistent color across the Venn diagrams in which it appears.}
 

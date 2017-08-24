@@ -49,10 +49,11 @@ example <- veccompare::compare.vectors(veccompare::example.vectors.list)
 purrr::map(example, "elements_involved")
 
 # Similarly, to extract all comparisons that involve "vector_a":
+# Note that '\\\%in\\\%' below should not include the '\\'s -- they were just added for this documentation (which was compiled with ROxygen2).
 example[
     sapply(
         purrr::map(example, "elements_involved"),
-       function(x){"vector_a" \%in x}
+       function(x){"vector_a" \\\%in\\\% x}
    )
 ]
 
