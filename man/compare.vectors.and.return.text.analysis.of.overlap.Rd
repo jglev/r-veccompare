@@ -15,23 +15,21 @@
   base_heading_level_to_use = 1)
 }
 \arguments{
-\item{named_list_of_vectors_to_compare}{(As in \code{\link{compare.vectors}}.)}
+\item{named_list_of_vectors_to_compare}{A named list of vectors to compare (see, for example, \code{\link{example.vectors.list}}). Duplicate values in a given vector will only be counted once (for example, c("a", "a", "b", "c") will be treated identically to c("a", "b", "c").}
 
-\item{degrees_of_comparison_to_include}{(As in \code{\link{compare.vectors}}.)}
+\item{degrees_of_comparison_to_include}{A number or vector of numbers of which degrees of comparison to print (for example, 'c(2, 5)' would print only 2- and 5-way vector comparisons).}
 
 \item{cat_immediately}{A logical (TRUE/FALSE) indicator whether to immediately print the output, as in an RMarkdown document.}
 
-\item{draw_venn_diagrams}{(As in \code{\link{compare.vectors}}.)}
+\item{draw_venn_diagrams}{A logical (TRUE/FALSE) indicator whether to draw Venn diagrams for all 2- through 5-way comparisons of vectors.}
 
-\item{viewport_npc_width_height_for_venn_diagrams}{(As in \code{\link{render.venn.diagram}}.)}
+\item{vector_colors_for_venn_diagrams}{An optional vector of color names for Venn diagrams (if \code{draw_venn_diagrams} is \code{TRUE}). Color names are applied to the named vectors in \code{named_list_of_vectors_to_compare} in their order in \code{named_list_of_vectors_to_compare}. If this is blank, a random color will be selected for each vector. Either way, each vector will have a consistent color across the Venn diagrams in which it appears.}
 
-\item{vector_colors_for_venn_diagrams}{(As in \code{\link{compare.vectors}}.)}
+\item{save_venn_diagram_files}{A logical (TRUE/FALSE) indicator whether to save Venn diagrams as PNG files.}
 
-\item{save_venn_diagram_files}{(As in \code{\link{compare.vectors}}.)}
+\item{location_for_venn_diagram_files}{An optional string giving a directory into which to save Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}). This location must already exist on the filesystem.}
 
-\item{location_for_venn_diagram_files}{(As in \code{\link{compare.vectors}}.)}
-
-\item{prefix_for_venn_diagram_files}{(As in \code{\link{compare.vectors}}.)}
+\item{prefix_for_venn_diagram_files}{An optional string giving a prefix to prepend to saved Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}).}
 
 \item{base_heading_level_to_use}{An integer indicating the highest-level heading to print. Defaults to \code{1} (i.e., start by using first-level headings); \code{1} is also the minimum value used.}
 }

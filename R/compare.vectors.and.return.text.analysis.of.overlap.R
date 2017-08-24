@@ -3,15 +3,8 @@
 #' This function is a wrapper for \code{\link{compare.vectors}}. It creates a Markdown report of all degrees of set comparisons between a named list of vectors.
 #'
 #' Use of this function is illustrated with the \code{Veccompare Overlap Report} RMarkdown template for RStudio that is installed as part of the \pkg{veccompare} package.
-#' @param named_list_of_vectors_to_compare (As in \code{\link{compare.vectors}}.)
-#' @param degrees_of_comparison_to_include (As in \code{\link{compare.vectors}}.)
+#' @inheritParams compare.vectors
 #' @param cat_immediately A logical (TRUE/FALSE) indicator whether to immediately print the output, as in an RMarkdown document.
-#' @param draw_venn_diagrams (As in \code{\link{compare.vectors}}.)
-#' @param viewport_npc_width_height_for_venn_diagrams (As in \code{\link{render.venn.diagram}}.)
-#' @param vector_colors_for_venn_diagrams (As in \code{\link{compare.vectors}}.)
-#' @param save_venn_diagram_files (As in \code{\link{compare.vectors}}.)
-#' @param location_for_venn_diagram_files (As in \code{\link{compare.vectors}}.)
-#' @param prefix_for_venn_diagram_files (As in \code{\link{compare.vectors}}.)
 #' @param base_heading_level_to_use An integer indicating the highest-level heading to print. Defaults to \code{1} (i.e., start by using first-level headings); \code{1} is also the minimum value used.
 #'
 #' @return A string of Markdown (and Venn diagrams, if \code{draw_venn_diagrams} is \code{TRUE}).
