@@ -33,7 +33,7 @@ which(
 		function(x){length(x) == 3}
 	)
 )[1]
-]]
+]]$venn_diagram
 
 # Print the diagram:
 veccompare::render.venn.diagram(diagram)

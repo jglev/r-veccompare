@@ -52,7 +52,7 @@ purrr::map(example, "elements_involved")
 example[
     sapply(
         purrr::map(example, "elements_involved"),
-       function(x){"vector_a" \%in\% x}
+       function(x){"vector_a" \\\%in\\\% x}
    )
 ]
 
