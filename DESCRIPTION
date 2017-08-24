@@ -1,12 +1,12 @@
 Package: veccompare
 Type: Package
 Title: Perform Set Operations on Vectors, Automatically Generating All n-Wise Comparisons, and Create Markdown Output Automatically
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: c(
-    person("Jacob", "Levernier", email = "jlevern@upenn.edu", role = c("aut", "cre")),
-    person("Heather", "Wacha", email = "wacha2@wisc.edu", role = "csp"))
+    person("Jacob Gerard", "Levernier", email = "jlevern@upenn.edu", role = c("aut", "cre")),
+    person("Heather Gaile", "Wacha", email = "wacha2@wisc.edu", role = "ctb", comment = "Provided intellectual overview during development of this package for use with medieval cartographic datasets."))
 Maintainer: Jacob Levernier <jlevern@upenn.edu>
-Description: This package contains functions for automating set operations (i.e., comparisons of overlap) between multiple vectors.
+Description: The veccompare package contains functions for automating set operations (i.e., comparisons of overlap) between multiple vectors.
     It also contains a function for automating reporting in RMarkdown, by generating markdown output for easy analysis, as well as an RMarkdown template for use with RStudio.
 License: BSD_3_clause + file LICENSE
 URL: https://gitlab.com/publicus/heather-wacha-map-and-place-network-mapping
