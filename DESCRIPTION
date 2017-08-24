@@ -2,20 +2,26 @@ Package: veccompare
 Type: Package
 Title: Perform Set Operations on Vectors, Automatically Generating All n-Wise Comparisons, and Create Markdown Output Automatically
 Version: 0.1.0
-Author: Jacob Levernier <jlevern@upenn.edu>
+Authors@R: c(
+    person("Jacob", "Levernier", email = "jlevern@upenn.edu", role = c("aut", "cre")),
+    person("Heather", "Wacha", email = "wacha2@wisc.edu", role = "csp"))
 Maintainer: Jacob Levernier <jlevern@upenn.edu>
 Description: This package contains functions for automating set operations (i.e., comparisons of overlap) between multiple vectors.
-    It also contains a function for automating reporting in RMarkdown, by generating markdown output for easy analysis.
-License: All Rights Reserved
+    It also contains a function for automating reporting in RMarkdown, by generating markdown output for easy analysis, as well as an RMarkdown template for use with RStudio.
+License: BSD_3_clause
+URL: https://gitlab.com/publicus/heather-wacha-map-and-place-network-mapping
+BugReports: https://gitlab.com/publicus/heather-wacha-map-and-place-network-mapping/issues
 Encoding: UTF-8
 LazyData: true
 Imports:
-		corrplot,
-		ggplot2,
+    corrplot,
+    ggplot2,
     gtools,
     grid,
     purrr,
     reshape2,
     qgraph,
     VennDiagram
+Suggests:
+    devtools
 RoxygenNote: 6.0.1
