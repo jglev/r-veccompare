@@ -8,7 +8,7 @@ Authors@R: c(
 Maintainer: Jacob Levernier <jlevern@upenn.edu>
 Description: This package contains functions for automating set operations (i.e., comparisons of overlap) between multiple vectors.
     It also contains a function for automating reporting in RMarkdown, by generating markdown output for easy analysis, as well as an RMarkdown template for use with RStudio.
-License: BSD_3_clause
+License: BSD_3_clause + file LICENSE
 URL: https://gitlab.com/publicus/heather-wacha-map-and-place-network-mapping
 BugReports: https://gitlab.com/publicus/heather-wacha-map-and-place-network-mapping/issues
 Encoding: UTF-8
