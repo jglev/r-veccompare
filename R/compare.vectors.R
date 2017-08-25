@@ -30,36 +30,30 @@
 #' @examples
 #' example <- veccompare::compare.vectors(veccompare::example.vectors.list)
 #'
-#' # One can extract similar elements across list items using the \code{purrr} package:
-#' purrr::map(example, "elements_involved")
+#' # To extract similar elements across list items:
+#' veccompare::extract.compared.vectors(
+#'   example,
+#'   elements_of_output = "elements_involved"
+#' )
 #'
-#' # Similarly, to extract all comparisons that involve "vector_a":
-#' # Note that '\%in\%' below should not include the '\'s.
-#' # They were just added for this documentation (which was compiled with ROxygen2).
-#' example[
-#'     sapply(
-#'         purrr::map(example, "elements_involved"),
-#'        function(x){"vector_a" \%in\% x}
-#'    )
-#' ]
+#' # To extract all comparisons that involve "vector_a":
+#' veccompare::extract.compared.vectors(
+#'   example,
+#'   vector_names = "vector_a"
+#' )
 #'
-#' # Similarly, to find all comparisons that were about "vector_a" and "vector_c":
-#' example[
-#'     sapply(
-#'         purrr::map(example, "elements_involved"),
-#'         function(x){setequal(x, c("vector_a", "vector_c"))}
-#'     )
-#' ]
+#' # To find all comparisons that were about "vector_a" and "vector_c":
+#' veccompare::extract.compared.vectors(
+#'   example,
+#'   vector_names = c("vector_a", "vector_c"),
+#'   only_match_vector_names = TRUE
+#' )
 #'
-#' # Similarly, to get all elements that did a two-way comparison:
-#' example[
-#'     which(
-#'         sapply(
-#'             purrr::map(example, "elements_involved"),
-#'             function(x){length(x) == 2}
-#'         )
-#'     )
-#' ]
+#' # To get all elements that did a two-way comparison:
+#' veccompare::extract.compared.vectors(
+#'   example,
+#'   degrees_of_comparison = 2
+#' )
 compare.vectors <- function(
 	named_list_of_vectors_to_compare,
 	degrees_of_comparison_to_include = NULL,

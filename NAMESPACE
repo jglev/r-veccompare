@@ -2,6 +2,7 @@
 
 export(compare.vectors)
 export(compare.vectors.and.return.text.analysis.of.overlap)
+export(extract.compared.vectors)
 export(generate.random.colors)
 export(render.venn.diagram)
 export(summarize.two.way.comparisons.percentage.overlap)
