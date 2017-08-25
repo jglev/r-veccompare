@@ -14,6 +14,8 @@
 #'
 # The below were recommended after using Ctrl + Shift + E in RStudio to do CRAN-like checks on the package.
 #' @importFrom "grDevices" "colors"
+#' @importFrom "grDevices" "png"
+#' @importFrom "grDevices" "dev.off"
 #' @importFrom "graphics" "par"
 #' @importFrom "stats" "runif"
 #' @importFrom "utils" "head"

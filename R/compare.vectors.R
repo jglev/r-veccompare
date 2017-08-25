@@ -437,6 +437,7 @@ compare.vectors <- function(
 							units = saved_venn_diagram_dimension_units,
 							width = saved_venn_diagram_width,
 							height = saved_venn_diagram_height
+							#, bg = "transparent" # Create a transparent background
 						)
 
 						veccompare::render.venn.diagram(venn_diagram, viewport_npc_width_height_for_images = viewport_npc_width_height_for_images_value)
