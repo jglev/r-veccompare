@@ -16,6 +16,6 @@ devtools::install_github("publicus/r-veccompare")
 
 ## Usage
 
-The primary function from `veccompare` is `compare.vectors()`. Complementarily, `compare.vectors.and.return.text.analysis.of.overlap()` will call `compare.vectors(}}))` and generate Markdown-style output from it (for example, for use within an RMarkdown file). `veccompare` also provides a function, `summarize.two.way.comparisons.percentage.overlap()`, that can create correlation-plot-style images and network graphs for all two-way comparisons between vectors.
+The primary function from `veccompare` is `compare.vectors()`. Complementarily, `compare.vectors.and.return.text.analysis.of.overlap()` will call `compare.vectors()` and generate Markdown-style output from it (for example, for use within an RMarkdown file). `veccompare` also provides a function, `summarize.two.way.comparisons.percentage.overlap()`, that can create correlation-plot-style images and network graphs for all two-way comparisons between vectors.
 
 An RMarkdown template illustrating several of `veccompare`'s features can be viewed and used from within RStudio by clicking `File -> New File -> R Markdown... -> From Template -> Veccompare Overlap Report`.
