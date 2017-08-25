@@ -145,6 +145,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 		saved_venn_diagram_resolution_ppi = saved_venn_diagram_resolution_ppi_value,
 		saved_venn_diagram_dimension_units = saved_venn_diagram_dimension_units_value,
 		saved_venn_diagram_width = saved_venn_diagram_width_value,
+		viewport_npc_width_height_for_images = viewport_npc_width_height_for_images_value,
 		saved_venn_diagram_height = saved_venn_diagram_height_value
 	)
 

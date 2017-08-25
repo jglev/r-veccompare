@@ -401,7 +401,7 @@ compare.vectors <- function(
 					if(save_venn_diagram_files == TRUE){
 						filename_to_use <- make.names(
 							paste(
-								paste(combination_set_operations[[combination_set_element_number]]$elements_involved, sep = "_", collapse = "_"),
+								paste(combination_set_operations[[combination_set_element_number]]$elements_involved, sep = "_vs_", collapse = "_vs_"),
 								"_venn_diagram.png",
 								sep = "",
 								collapse = ""
