@@ -7,7 +7,8 @@
 \usage{
 
   summarize.two.way.comparisons.percentage.overlap(named_list_of_vectors_to_compare,
-  output_type = "table", melt_table = FALSE, network_graph_minimum = 0)
+  output_type = "table", melt_table = FALSE, network_graph_minimum = 0,
+  margins_for_plot = NULL)
 }
 \arguments{
 \item{named_list_of_vectors_to_compare}{A named list of vectors to compare (see, for example, \code{\link{example.vectors.list}}). Duplicate values in a given vector will only be counted once (for example, c("a", "a", "b", "c") will be treated identically to c("a", "b", "c").}
@@ -17,6 +18,8 @@
 \item{melt_table}{A logical (TRUE/FALSE) indicator, when \code{output_type} is \code{"table"}, whether to print the output in \code{\link[reshape2]{melt}ed} form (using the \pkg{reshape2} package).}
 
 \item{network_graph_minimum}{\code{minimum} argument from \code{\link[qgraph]{qgraph}}, for when \code{output_type} is \code{"network_graph"}.}
+
+\item{margins_for_plot}{The margins for image output (if \code{output_type} is \code{matrix_plot} or \code{network_graph}). Specified as a vector of numbers, in the form \code{c(bottom, left, top, right)}. If \code{output_type} is \code{matrix_plot}, defaults to \code{c(2, 0, 1, 0)}; if \code{output_type} is \code{network_graph}, defaults to \code{c(3, 3, 3, 0.5)}.}
 }
 \value{
 Either a matrix (if \code{output} is \code{"table"}), or an image (if \code{output} is \code{"matrix_plot"} or \code{"network_graph"}). If an image is printed, nothing is returned by the function; rather, the output is printed immediately.

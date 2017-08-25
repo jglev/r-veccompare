@@ -4,6 +4,7 @@
 #' @param output_type Either \code{"table"}, \code{"matrix_plot"}, or \code{"network_graph"}. \code{"table"} will return a matrix showing percentage overlap between each pair of vectors. \code{"matrix_plot"} will plot this table, coloring it by the amount of overlap. \code{"network_graph"} will return a network graph image illustrating the overlap percentages between each pair of vectors.
 #' @param melt_table A logical (TRUE/FALSE) indicator, when \code{output_type} is \code{"table"}, whether to print the output in \code{\link[reshape2]{melt}ed} form (using the \pkg{reshape2} package).
 #' @param network_graph_minimum \code{minimum} argument from \code{\link[qgraph]{qgraph}}, for when \code{output_type} is \code{"network_graph"}.
+#' @param margins_for_plot The margins for image output (if \code{output_type} is \code{matrix_plot} or \code{network_graph}). Specified as a vector of numbers, in the form \code{c(bottom, left, top, right)}. If \code{output_type} is \code{matrix_plot}, defaults to \code{c(2, 0, 1, 0)}; if \code{output_type} is \code{network_graph}, defaults to \code{c(3, 3, 3, 0.5)}.
 #'
 #' @return Either a matrix (if \code{output} is \code{"table"}), or an image (if \code{output} is \code{"matrix_plot"} or \code{"network_graph"}). If an image is printed, nothing is returned by the function; rather, the output is printed immediately.
 #'
@@ -34,7 +35,8 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 	named_list_of_vectors_to_compare,
 	output_type = "table", # c("table", "matrix_plot", "network_graph")
 	melt_table = FALSE, # Overridden by output_type
-	network_graph_minimum = 0
+	network_graph_minimum = 0,
+	margins_for_plot = NULL
 ){
 
 	if(! output_type %in% c("table", "matrix_plot", "network_graph")){
@@ -45,11 +47,21 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 		}
 	}
 
-	# Comput all two-way comparisons:
+		if(is.null(margins_for_plot)){
+			if(output_type == "matrix_plot"){
+				c(2, 0, 1, 0) # Increase the margins, so that nothing gets cut off at the top and bottom of the plot.
+			} else if(output_type == "network_graph"){
+				c(3, 3, 3, 0.5) # Margins (for the plot, not the legend): c(bottom, left, top, right)
+			} else { # We shouldn't ever get to this step; I'm just providing a fallback to make future code expansion easier.
+				margins_for_plot <- c(1, 1, 1, 1)
+			}
+		}
+
+	# Compute all two-way comparisons:
 	two_way_comparison_output <- veccompare::compare.vectors(
 		named_list_of_vectors_to_compare,
 		degrees_of_comparison_to_include = 2,
-		suppress_messages = TRUE,
+		suppress_messages = TRUE
 	)
 
 	output_table <- matrix( # We'll fill this in below
@@ -98,7 +110,7 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 			cl.align = "r",
 			cl.lim = c(0, 1.0),
 			tl.cex = 0.8, # Title font size ratio.
-			mar = c(2, 0, 1, 0) # Increase the margins, so that nothing gets cut off at the top and bottom of the plot.
+			mar = margins_for_plot
 		)
 
 		# return(plot_of_table)
@@ -138,7 +150,7 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 			threshold = -1, # Set this lower than 0, to effectively turn it off.
 			DoNotPlot = FALSE,
 
-			# layout = "circle",
+			layout = "circle",
 
 			legend = TRUE,
 			labels = c(1:length(named_list_of_vectors_to_compare)), # names(named_list_of_vectors_to_compare)[order(names(named_list_of_vectors_to_compare))], # Note: There seems to be a bug with this package when using an edge list and this option, which is why I'm using output_table here above.
@@ -149,7 +161,7 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 
 			nodeNames = names(named_list_of_vectors_to_compare)[order(names(named_list_of_vectors_to_compare))],
 			legend.cex = 0.3,
-			mar = c(3, 3, 3, 0.5) # Margins (for the plot, not the legend): c(bottom, left, top, right)
+			mar = margins_for_plot
 		)
 
 		# return(qgraph_output)
