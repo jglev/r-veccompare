@@ -1,4 +1,4 @@
-#' veccompare: Automatically Generating All n-Wise Set Comparisons on Vectors
+#' veccompare: Automatically Generate All n-Wise Set Comparisons on Vectors
 #'
 #' The \pkg{veccompare} package contains functions for automating set operations. Given a named list of 5 vectors, for example, \pkg{veccompare} can calculate all 2-, 3-, 4-, and 5-way comparisons between those vectors, recording information for each comparison about the set "union" (combined elements), "intersection" (overlap / shared elements), and compliments (which elements are unique to each vector involved in the comparison).
 #'
