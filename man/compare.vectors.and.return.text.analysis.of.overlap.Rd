@@ -11,7 +11,9 @@
   draw_venn_diagrams = FALSE, viewport_npc_width_height_for_images = 1,
   vector_colors_for_venn_diagrams = NULL, save_venn_diagram_files = FALSE,
   location_for_venn_diagram_files = "", prefix_for_venn_diagram_files = "",
-  base_heading_level_to_use = 1)
+  saved_venn_diagram_resolution_ppi = 300,
+  saved_venn_diagram_dimension_units = "in", saved_venn_diagram_width = 8,
+  saved_venn_diagram_height = 6, base_heading_level_to_use = 1)
 }
 \arguments{
 \item{named_list_of_vectors_to_compare}{A named list of vectors to compare (see, for example, \code{\link{example.vectors.list}}). Duplicate values in a given vector will only be counted once (for example, c("a", "a", "b", "c") will be treated identically to c("a", "b", "c").}
@@ -31,6 +33,14 @@
 \item{location_for_venn_diagram_files}{An optional string giving a directory into which to save Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}). This location must already exist on the filesystem.}
 
 \item{prefix_for_venn_diagram_files}{An optional string giving a prefix to prepend to saved Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}).}
+
+\item{saved_venn_diagram_resolution_ppi}{An optional number giving a resolution (PPI) for saved Venn diagrams (if \code{save_venn_diagram_files} is \code{TRUE}).}
+
+\item{saved_venn_diagram_dimension_units}{An optional string giving units for specifying \code{saved_venn_diagram_width} and \code{saved_venn_diagram_height} (if \code{save_venn_diagram_files} is \code{TRUE}). Can be \code{px} (pixels), \code{in} (inches, the default), \code{cm}, or \code{mm}.}
+
+\item{saved_venn_diagram_width}{The width (in \code{saved_venn_diagram_dimension_units} units) for saved Venn diagrams (if \code{save_venn_diagram_files} is \code{TRUE}).}
+
+\item{saved_venn_diagram_height}{The height (in \code{saved_venn_diagram_dimension_units} units) for saved Venn diagrams (if \code{save_venn_diagram_files} is \code{TRUE}).}
 
 \item{base_heading_level_to_use}{An integer indicating the highest-level heading to print. Defaults to \code{1} (i.e., start by using first-level headings); \code{1} is also the minimum value used.}
 }

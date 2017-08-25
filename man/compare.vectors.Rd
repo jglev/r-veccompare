@@ -8,6 +8,9 @@ compare.vectors(named_list_of_vectors_to_compare,
   degrees_of_comparison_to_include = NULL, draw_venn_diagrams = FALSE,
   vector_colors_for_venn_diagrams = NULL, save_venn_diagram_files = FALSE,
   location_for_venn_diagram_files = "", prefix_for_venn_diagram_files = "",
+  saved_venn_diagram_resolution_ppi = 300,
+  saved_venn_diagram_dimension_units = "in", saved_venn_diagram_width = 8,
+  saved_venn_diagram_height = 6, viewport_npc_width_height_for_images = 1,
   suppress_messages = FALSE)
 }
 \arguments{
@@ -24,6 +27,16 @@ compare.vectors(named_list_of_vectors_to_compare,
 \item{location_for_venn_diagram_files}{An optional string giving a directory into which to save Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}). This location must already exist on the filesystem.}
 
 \item{prefix_for_venn_diagram_files}{An optional string giving a prefix to prepend to saved Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}).}
+
+\item{saved_venn_diagram_resolution_ppi}{An optional number giving a resolution (PPI) for saved Venn diagrams (if \code{save_venn_diagram_files} is \code{TRUE}).}
+
+\item{saved_venn_diagram_dimension_units}{An optional string giving units for specifying \code{saved_venn_diagram_width} and \code{saved_venn_diagram_height} (if \code{save_venn_diagram_files} is \code{TRUE}). Can be \code{px} (pixels), \code{in} (inches, the default), \code{cm}, or \code{mm}.}
+
+\item{saved_venn_diagram_width}{The width (in \code{saved_venn_diagram_dimension_units} units) for saved Venn diagrams (if \code{save_venn_diagram_files} is \code{TRUE}).}
+
+\item{saved_venn_diagram_height}{The height (in \code{saved_venn_diagram_dimension_units} units) for saved Venn diagrams (if \code{save_venn_diagram_files} is \code{TRUE}).}
+
+\item{viewport_npc_width_height_for_images}{The scale at which to print an image. If the image is cut off at its edges, for example, this can be set lower than 1.0.}
 
 \item{suppress_messages}{A logical (TRUE/FALSE) indicator whether to suppress messages. Even if this is \code{TRUE}, warnings will still be printed.}
 }
@@ -49,7 +62,8 @@ example <- veccompare::compare.vectors(veccompare::example.vectors.list)
 purrr::map(example, "elements_involved")
 
 # Similarly, to extract all comparisons that involve "vector_a":
-# Note that '\\\%in\\\%' below should not include the '\\'s -- they were just added for this documentation (which was compiled with ROxygen2).
+# Note that '\\\%in\\\%' below should not include the '\\'s.
+# They were just added for this documentation (which was compiled with ROxygen2).
 example[
     sapply(
         purrr::map(example, "elements_involved"),

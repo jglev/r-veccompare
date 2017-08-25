@@ -35,6 +35,6 @@ render.venn.diagram <- function(
 	grid::pushViewport(grid::viewport(
 		width = grid::unit(viewport_npc_width_height_for_images, "npc"),
 		height = grid::unit(viewport_npc_width_height_for_images, "npc")
-	)); # Following https://stackoverflow.com/questions/21234439/how-to-force-the-labels-to-fit-in-venndiagram#comment75690400_22826211, force the output rendering mechanism to be smaller than normal, in order not to cut off diagram names.
+	)) # Following https://stackoverflow.com/questions/21234439/how-to-force-the-labels-to-fit-in-venndiagram#comment75690400_22826211, force the output rendering mechanism to be smaller than normal, in order not to cut off diagram names.
 	grid::grid.draw(venn_diagram_created_with_VennDiagram_package)
 }

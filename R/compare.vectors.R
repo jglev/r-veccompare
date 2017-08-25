@@ -1,5 +1,6 @@
 #' Compare all combinations of vectors using set operations
 #'
+#' @inheritParams render.venn.diagram
 #' @param named_list_of_vectors_to_compare A named list of vectors to compare (see, for example, \code{\link{example.vectors.list}}). Duplicate values in a given vector will only be counted once (for example, c("a", "a", "b", "c") will be treated identically to c("a", "b", "c").
 #' @param degrees_of_comparison_to_include A number or vector of numbers of which degrees of comparison to print (for example, 'c(2, 5)' would print only 2- and 5-way vector comparisons).
 #' @param draw_venn_diagrams A logical (TRUE/FALSE) indicator whether to draw Venn diagrams for all 2- through 5-way comparisons of vectors.
@@ -7,6 +8,11 @@
 #' @param save_venn_diagram_files A logical (TRUE/FALSE) indicator whether to save Venn diagrams as PNG files.
 #' @param location_for_venn_diagram_files An optional string giving a directory into which to save Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}). This location must already exist on the filesystem.
 #' @param prefix_for_venn_diagram_files An optional string giving a prefix to prepend to saved Venn diagram PNG files (if \code{save_venn_diagram_files} is \code{TRUE}).
+#' @param saved_venn_diagram_resolution_ppi An optional number giving a resolution (PPI) for saved Venn diagrams (if \code{save_venn_diagram_files} is \code{TRUE}).
+#' @param saved_venn_diagram_dimension_units An optional string giving units for specifying \code{saved_venn_diagram_width} and \code{saved_venn_diagram_height} (if \code{save_venn_diagram_files} is \code{TRUE}). Can be \code{px} (pixels), \code{in} (inches, the default), \code{cm}, or \code{mm}.
+#' @param saved_venn_diagram_width The width (in \code{saved_venn_diagram_dimension_units} units) for saved Venn diagrams (if \code{save_venn_diagram_files} is \code{TRUE}).
+#' @param saved_venn_diagram_height The height (in \code{saved_venn_diagram_dimension_units} units) for saved Venn diagrams (if \code{save_venn_diagram_files} is \code{TRUE}).
+#'
 #' @param suppress_messages A logical (TRUE/FALSE) indicator whether to suppress messages. Even if this is \code{TRUE}, warnings will still be printed.
 #'
 #' @return A list, with one object for each comparison of vectors. The list contains the following elements:
@@ -28,7 +34,8 @@
 #' purrr::map(example, "elements_involved")
 #'
 #' # Similarly, to extract all comparisons that involve "vector_a":
-#' # Note that '\%in\%' below should not include the '\'s -- they were just added for this documentation (which was compiled with ROxygen2).
+#' # Note that '\%in\%' below should not include the '\'s.
+#' # They were just added for this documentation (which was compiled with ROxygen2).
 #' example[
 #'     sapply(
 #'         purrr::map(example, "elements_involved"),
@@ -61,6 +68,11 @@ compare.vectors <- function(
 	save_venn_diagram_files = FALSE,
 	location_for_venn_diagram_files = "",
 	prefix_for_venn_diagram_files = "",
+	saved_venn_diagram_resolution_ppi = 300,
+	saved_venn_diagram_dimension_units = "in",
+	saved_venn_diagram_width = 8,
+	saved_venn_diagram_height = 6,
+	viewport_npc_width_height_for_images = 1.0,
 	suppress_messages = FALSE
 ){
 	vector_names <- names(named_list_of_vectors_to_compare)
@@ -422,7 +434,21 @@ compare.vectors <- function(
 							message("Saving Venn diagram to '", final_path_for_venn_diagram, "'...")
 						}
 
-						ggplot2::ggsave(file = final_path_for_venn_diagram, venn_diagram)
+						viewport_npc_width_height_for_images_value <- viewport_npc_width_height_for_images
+
+						# Begin pumping output into a PNG file:
+						png(
+							filename = final_path_for_venn_diagram,
+							res = saved_venn_diagram_resolution_ppi,
+							units = saved_venn_diagram_dimension_units,
+							width = saved_venn_diagram_width,
+							height = saved_venn_diagram_height
+						)
+
+						veccompare::render.venn.diagram(venn_diagram, viewport_npc_width_height_for_images = viewport_npc_width_height_for_images_value)
+
+						# Stop sending output to a PNG
+						dev.off()
 					} # End of if(save_venn_diagram_files == TRUE)
 				} # End of for loop over combination_set_element_number
 			} # End of for loop over degree_of_comparison

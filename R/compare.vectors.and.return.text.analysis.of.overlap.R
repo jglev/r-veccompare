@@ -35,6 +35,10 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 	save_venn_diagram_files = FALSE,
 	location_for_venn_diagram_files = "",
 	prefix_for_venn_diagram_files = "",
+	saved_venn_diagram_resolution_ppi = 300,
+	saved_venn_diagram_dimension_units = "in",
+	saved_venn_diagram_width = 8,
+	saved_venn_diagram_height = 6,
 	base_heading_level_to_use = 1
 ){
 
@@ -76,6 +80,31 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 			prefix_for_venn_diagram_files_value <- ""
 		}
 
+		if(saved_venn_diagram_resolution_ppi != ""){ # Sanitize the user input
+			saved_venn_diagram_resolution_ppi_value <- as.character(saved_venn_diagram_resolution_ppi)
+		} else {
+			saved_venn_diagram_resolution_ppi_value <- ""
+		}
+
+		if(saved_venn_diagram_dimension_units != ""){ # Sanitize the user input
+			saved_venn_diagram_dimension_units_value <- as.character(saved_venn_diagram_dimension_units)
+		} else {
+			saved_venn_diagram_dimension_units_value <- ""
+		}
+
+		if(saved_venn_diagram_width != ""){ # Sanitize the user input
+			saved_venn_diagram_width_value <- as.character(saved_venn_diagram_width)
+		} else {
+			saved_venn_diagram_width_value <- ""
+		}
+
+		if(saved_venn_diagram_height != ""){ # Sanitize the user input
+			saved_venn_diagram_height_value <- as.character(saved_venn_diagram_height)
+		} else {
+			saved_venn_diagram_height_value <- ""
+		}
+
+
 		if(!is.null(vector_colors_for_venn_diagrams)){ # Sanitize the user input
 			message("Using the following Venn diagram colors: ", veccompare::vector.print.with.and(vector_colors_for_venn_diagrams))
 
@@ -110,7 +139,11 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 		vector_colors_for_venn_diagrams = vector_colors_for_venn_diagrams_value,
 		save_venn_diagram_files = save_venn_diagram_files_value,
 		location_for_venn_diagram_files = location_for_venn_diagram_files_value,
-		prefix_for_venn_diagram_files = prefix_for_venn_diagram_files_value
+		prefix_for_venn_diagram_files = prefix_for_venn_diagram_files_value,
+		saved_venn_diagram_resolution_ppi = saved_venn_diagram_height_value,
+		saved_venn_diagram_dimension_units = saved_venn_diagram_dimension_units_value,
+		saved_venn_diagram_width = saved_venn_diagram_width_value,
+		saved_venn_diagram_height = saved_venn_diagram_height_value
 	)
 
 	if(is.null(degrees_of_comparison_to_include)){ # If we *have not* been told which comparisons (e.g., 2-way, 3-way, etc.) to include, we'll use all of them by default:

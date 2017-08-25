@@ -1,7 +1,7 @@
 Package: veccompare
 Type: Package
 Title: Perform Set Operations on Vectors, Automatically Generating All n-Wise Comparisons, and Create Markdown Output Automatically
-Version: 0.1.0.9000
+Version: 0.1.0
 Authors@R: c(
     person("Jacob Gerard", "Levernier", email = "jlevern@upenn.edu", role = c("aut", "cre")),
     person("Heather Gaile", "Wacha", email = "wacha2@wisc.edu", role = "ctb", comment = "Provided intellectual overview during development of this package for use with medieval cartographic datasets."))
@@ -17,7 +17,6 @@ Depends:
     R (>= 2.10)
 Imports:
     corrplot,
-    ggplot2,
     gtools,
     grid,
     purrr,

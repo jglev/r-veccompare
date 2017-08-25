@@ -9,4 +9,4 @@ example.vectors.list <- list(
 	"vector_f" = c("f", "g", "a", "w")
 )
 
-devtools::use_data(example.vectors.list, overwrite = TRUE)
+# devtools::use_data(example.vectors.list, overwrite = TRUE)
