@@ -81,7 +81,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 		}
 
 		if(saved_venn_diagram_resolution_ppi != ""){ # Sanitize the user input
-			saved_venn_diagram_resolution_ppi_value <- as.character(saved_venn_diagram_resolution_ppi)
+			saved_venn_diagram_resolution_ppi_value <- as.numeric(saved_venn_diagram_resolution_ppi)
 		} else {
 			saved_venn_diagram_resolution_ppi_value <- ""
 		}
@@ -93,13 +93,13 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 		}
 
 		if(saved_venn_diagram_width != ""){ # Sanitize the user input
-			saved_venn_diagram_width_value <- as.character(saved_venn_diagram_width)
+			saved_venn_diagram_width_value <- as.numeric(saved_venn_diagram_width)
 		} else {
 			saved_venn_diagram_width_value <- ""
 		}
 
 		if(saved_venn_diagram_height != ""){ # Sanitize the user input
-			saved_venn_diagram_height_value <- as.character(saved_venn_diagram_height)
+			saved_venn_diagram_height_value <- as.numeric(saved_venn_diagram_height)
 		} else {
 			saved_venn_diagram_height_value <- ""
 		}
@@ -124,6 +124,8 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 
 	if(draw_venn_diagrams_value == TRUE & cat_immediately != TRUE){
 			warning("'draw_venn_diagrams' is TRUE, but 'cat_immediately' is FALSE. 'cat_immediately' needs to be set to TRUE in order for Venn diagrams to be drawn in the output. Therefore, skipping drawing diagrams...")
+
+		draw_venn_diagrams_value <- FALSE
 	}
 
 	output_markdown <- NULL # We'll fill this in below.
@@ -140,7 +142,7 @@ compare.vectors.and.return.text.analysis.of.overlap <- function(
 		save_venn_diagram_files = save_venn_diagram_files_value,
 		location_for_venn_diagram_files = location_for_venn_diagram_files_value,
 		prefix_for_venn_diagram_files = prefix_for_venn_diagram_files_value,
-		saved_venn_diagram_resolution_ppi = saved_venn_diagram_height_value,
+		saved_venn_diagram_resolution_ppi = saved_venn_diagram_resolution_ppi_value,
 		saved_venn_diagram_dimension_units = saved_venn_diagram_dimension_units_value,
 		saved_venn_diagram_width = saved_venn_diagram_width_value,
 		saved_venn_diagram_height = saved_venn_diagram_height_value
