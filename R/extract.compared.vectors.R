@@ -103,7 +103,16 @@ extract.compared.vectors <- function(
 	}
 
 	if(!is.null(elements_of_output)){
-		output <- purrr::map(output, elements_of_output) # Extract just the elements_of_output elements from across the list items of output.
+		# output <- purrr::map(output, elements_of_output)
+
+		# Extract just the elements_of_output elements from across the list items of output:
+		output <- lapply(output, function(x){
+			return(x[elements_of_output])
+		})
+	}
+
+	if(length(output) == 1){
+		output <- output[[1]]
 	}
 
 	return(output)

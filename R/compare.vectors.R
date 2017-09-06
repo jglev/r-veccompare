@@ -19,7 +19,7 @@
 #' \describe{
 #'   \item{elements_involved}{The vector names involved in the comparison.}
 #'   \item{union_of_elements}{A vector of all (deduplicated) items involved in the comparison, across all of the vectors.}
-#'   \item{overlap_of_elements}{A vector of the deduplicated elements that occured in all of the compared vectors.}
+#'   \item{overlap_of_elements}{A vector of the deduplicated elements that occurred in all of the compared vectors.}
 #'   \item{elements_unique_to_first_element}{This element will have a sub-element named for each vector being compared (i.e., for each of the names in \code{$elements_involved}). The (deduplicated) items that were unique to that vector (i.e., not overlapping with any other vector in the comparison).}
 #'   \item{venn_diagram}{If \code{save_venn_diagram_files} is \code{TRUE}, and the comparison is of 2 through 5 vectors, a Venn diagram object produced using the \pkg{VennDiagram} package. This diagram can be rendered using \code{\link{render.venn.diagram}}.}
 #' }

@@ -49,9 +49,9 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 
 		if(is.null(margins_for_plot)){
 			if(output_type == "matrix_plot"){
-				c(2, 0, 1, 0) # Increase the margins, so that nothing gets cut off at the top and bottom of the plot.
+				margins_for_plot <- c(2, 0, 1, 0) # Increase the margins, so that nothing gets cut off at the top and bottom of the plot.
 			} else if(output_type == "network_graph"){
-				c(3, 3, 3, 0.5) # Margins (for the plot, not the legend): c(bottom, left, top, right)
+				margins_for_plot <- c(3, 3, 3, 0.5) # Margins (for the plot, not the legend): c(bottom, left, top, right)
 			} else { # We shouldn't ever get to this step; I'm just providing a fallback to make future code expansion easier.
 				margins_for_plot <- c(1, 1, 1, 1)
 			}

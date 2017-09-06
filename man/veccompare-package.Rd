@@ -32,7 +32,7 @@ Useful links:
 
 Other contributors:
 \itemize{
-  \item Heather Gaile Wacha \email{wacha2@wisc.edu} (Provided intellectual overview during development of this package for use with medieval cartographic datasets.) [contributor]
+  \item Heather Gaile Wacha \email{wacha2@wisc.edu} (Provided intellectual overview during development of this package for use with medieval cartographic datasets.) [NA]
 }
 
 }
