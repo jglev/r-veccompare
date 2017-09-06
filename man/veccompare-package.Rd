@@ -22,17 +22,17 @@ An RMarkdown template illustrating several of \pkg{veccompare}'s features can be
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://gitlab.com/publicus/heather-wacha-map-and-place-network-mapping}
-  \item Report bugs at \url{https://gitlab.com/publicus/heather-wacha-map-and-place-network-mapping/issues}
+  \item \url{https://github.com/publicus/r-veccompare}
+  \item Report bugs at \url{https://github.com/publicus/r-veccompare/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Jacob Gerard Levernier \email{jlevern@upenn.edu}
+\strong{Maintainer}: Jacob Gerard Levernier \email{jlevern@upenn.edu} (Designed and authored the package source code and documentation.)
 
-Other contributors:
+Authors:
 \itemize{
-  \item Heather Gaile Wacha \email{wacha2@wisc.edu} (Provided intellectual overview during development of this package for use with medieval cartographic datasets.) [NA]
+  \item Heather Gaile Wacha \email{wacha2@wisc.edu} (Provided intellectual overview and consultation during development for use with medieval cartographic datasets.) [NA]
 }
 
 }
