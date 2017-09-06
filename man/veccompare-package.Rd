@@ -28,11 +28,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Jacob Gerard Levernier \email{jlevern@upenn.edu} (Designed and authored the package source code and documentation.)
+\strong{Maintainer}: Jacob Gerard Levernier \email{jlevern@upenn.edu} (Designed and authored the package source code and documentation.) [designer, engineer, programmer]
 
 Authors:
 \itemize{
-  \item Heather Gaile Wacha \email{wacha2@wisc.edu} (Provided intellectual overview and consultation during development for use with medieval cartographic datasets.) [NA]
+  \item Heather Gaile Wacha \email{wacha2@wisc.edu} (Provided intellectual overview and consultation during development for use with medieval cartographic datasets.) [conceptor, consultant to a project, data contributor]
 }
 
 }
