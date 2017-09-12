@@ -7,7 +7,7 @@
 
 There were no ERRORs or WARNINGs.
 
-There were three NOTEs:
+There was one NOTE:
 
 * Maintainer: 'Jacob Levernier <jlevern@upenn.edu>'
 	
@@ -23,11 +23,6 @@ There were three NOTEs:
 	  RMarkdown (11:61, 11:135)  
 	  RStudio (11:167)  
 	  veccompare (10:18)
-* Maintainer field differs from that derived from Authors@R
-	Maintainer: 'Jacob Levernier <jlevern@upenn.edu>'
-	Authors@R:  'Jacob Gerard Levernier <jlevern@upenn.edu>'
-
-
 
 ## Downstream dependencies
 
