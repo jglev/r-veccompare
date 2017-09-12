@@ -1,4 +1,3 @@
-# NOTE WELL: Several author roles below are listed here that only appear when using a patched version of roxygen, available at https://github.com/publicus/roxygen. This is until a Pull Request (https://github.com/klutometis/roxygen/pull/662) is approved for the upstream roxygen project.
 Package: veccompare
 Type: Package
 Title: Perform Set Operations on Vectors, Automatically Generating All n-Wise Comparisons, and Create Markdown Output

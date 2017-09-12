@@ -13,7 +13,7 @@ Designed and authored the package source code and documentation.
 Roles: author, creator, designer, engineer, programmer
 - Heather Gaile Wacha (<wacha2@wisc.edu>)  
 Provided intellectual overview and consultation during development for use with medieval cartographic datasets. 
-Roles: conceptor, consultor, data contributor
+Roles: conceptor, consultant, data contributor
 
 ## Installation
 
