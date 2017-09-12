@@ -9,10 +9,10 @@ The package also contains a function for automating reporting in [RMarkdown](htt
 ## Authors
 
 - Jacob Gerard Levernier (<jlevern@upenn.edu>) (**Current Maintainer**)  
-Designed and authored the package source code and documentation.  
+Designed and authored the package source code and documentation.    
 Roles: author, creator, designer, engineer, programmer
 - Heather Gaile Wacha (<wacha2@wisc.edu>)  
-Provided intellectual overview and consultation during development for use with medieval cartographic datasets. 
+Provided intellectual overview and consultation during development for use with medieval cartographic datasets.  
 Roles: conceptor, consultant, data contributor
 
 ## Installation
