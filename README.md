@@ -6,6 +6,15 @@
 
 The package also contains a function for automating reporting in [RMarkdown](http://rmarkdown.rstudio.com/lesson-1.html "RStudio: RMarkdown Introduction"), by generating markdown output for easy analysis, as well as an RMarkdown template for use with RStudio.
 
+## Authors
+
+- Jacob Gerard Levernier (<jlevern@upenn.edu>) (**Current Maintainer**)  
+Designed and authored the package source code and documentation.  
+Roles: author, creator, designer, engineer, programmer
+- Heather Gaile Wacha (<wacha2@wisc.edu>)  
+Provided intellectual overview and consultation during development for use with medieval cartographic datasets. 
+Roles: conceptor, consultor, data contributor
+
 ## Installation
 
 ```{r}
