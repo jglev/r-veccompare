@@ -2,13 +2,13 @@ Package: veccompare
 Type: Package
 Title: Perform Set Operations on Vectors, Automatically Generating All n-Wise Comparisons, and Create Markdown Output
 Version: 0.1.0
-Date: 2017-09-12
+Date: 2017-09-13
 Authors@R: c(
     person("Jacob Gerard", "Levernier", email = "jlevern@upenn.edu", role = c("aut", "cre"), comment = "Designed and authored the package source code and documentation. Roles: author, creator, designer, engineer, programmer"), # Additional MARC Relator roles: "dsr", "eng", "prg"
     person("Heather Gaile", "Wacha", email = "wacha2@wisc.edu", role = c("aut"), comment = "Provided intellectual overview and consultation during development for use with medieval cartographic datasets. Roles: conceptor, consultant, data contributor")) # Additional MARC Relator roles: "ccp", "csp", "dtc"
 Maintainer: Jacob Gerard Levernier <jlevern@upenn.edu>
-Description: The veccompare package contains functions for automating set operations (i.e., comparisons of overlap) between multiple vectors.
-    It also contains a function for automating reporting in RMarkdown, by generating markdown output for easy analysis, as well as an RMarkdown template for use with RStudio.
+Description: Automates set operations (i.e., comparisons of overlap) between multiple vectors.
+    It also contains a function for automating reporting in 'RMarkdown', by generating markdown output for easy analysis, as well as an 'RMarkdown' template for use with 'RStudio'.
 License: BSD_3_clause + file LICENSE
 URL: https://github.com/publicus/r-veccompare
 BugReports: https://github.com/publicus/r-veccompare/issues
