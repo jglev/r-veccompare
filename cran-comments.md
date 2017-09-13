@@ -2,7 +2,7 @@
 
 This is a resubmission. In this version I have:
 
-* Changed the DESCRIPTION to replace the redundant "The veccompare package contains functions for automating" with "Automates ...."
+* Changed the DESCRIPTION to replace the redundant "The veccompare package contains functions for automating" with "Automates..."
 
 * Single quoted software names such as 'RMarkdown' and 'RStudio'.
 
