@@ -18,22 +18,7 @@ This is a resubmission. In this version I have:
 
 There were no ERRORs or WARNINGs.
 
-There was one NOTE:
-
-* Maintainer: 'Jacob Gerard Levernier <jlevern@upenn.edu>'
-	
-	New submission
-	
-	License components with restrictions and base license permitting such:
-	  BSD_3_clause + file LICENSE
-	File 'LICENSE':
-	  YEAR: 2017
-	  COPYRIGHT HOLDER: Jacob G. Levernier
-	
-	Possibly mis-spelled words in DESCRIPTION:
-	  RMarkdown (12:61, 12:135)
-	  RStudio (12:167)
-	  veccompare (11:18)
+There were no NOTEs.
 
 ## Downstream dependencies
 
