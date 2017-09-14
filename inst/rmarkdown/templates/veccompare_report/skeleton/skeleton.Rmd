@@ -2,7 +2,7 @@
 title: "Untitled"
 author: "Author Name"
 date: "January 1, 1970"
-output: word_document
+output: html_document
 ---
 
 ```{r setup, echo = FALSE, eval = TRUE}
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(include = TRUE) # Do run code chunks.
 knitr::opts_chunk$set(fig.width = 8) # Set the default image width wide enough so that it doesn't get cut off.
 knitr::opts_chunk$set(fig.height = 6)
 knitr::opts_chunk$set(fig.align="center")
-knitr::opts_chunk$set(dev = 'pdf') # Set the default image writer to PDF
+knitr::opts_chunk$set(dev = 'png') # Set the default image writer to PDF
 options(digits=2) # Use two decimal places by default.
 knitr::opts_chunk$set(cache = FALSE)
 ```

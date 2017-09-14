@@ -41,11 +41,7 @@ summarize.two.way.comparisons.percentage.overlap(
 
 summarize.two.way.comparisons.percentage.overlap(
 	veccompare::example.vectors.list,
-	output_type = "matrix_plot"
+	output_type = "matrix_plot" # You can also choose "network_graph"
 )
 
-summarize.two.way.comparisons.percentage.overlap(
-	veccompare::example.vectors.list,
-	output_type = "network_graph"
-)
 }

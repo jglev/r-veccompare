@@ -13,14 +13,28 @@ This is a resubmission. In this version I have:
 
 ## Test environments
 
-* local ubuntu 17.04 install, R 3.3.2 (2016-10-31)
-* Windows via win-builder, R Under development (unstable) (2017-08-25 r73125)
+* local ubuntu 17.04 install, R 3.3.2 (2016-10-31) (platform x86_64-pc-linux-gnu)
+* windows 
+    * local windows 10 install, R 3.3.0 (2016-05-03) (platform x86-w64-mingw32)
+    * via win-builder, R Under development (unstable) (2017-09-12 r73242) (platform x86_64-w64-mingw32)
 
 ## R CMD check results
 
 There were no ERRORs or WARNINGs.
 
-There were no NOTEs.
+There was one NOTE:
+
+* checking dependencies in R code ... NOTE
+    Namespace in Imports field not imported from: ‘pander’
+    All declared Imports should be used.
+    
+    * Explanation: 
+      The pander package is used in the RMarkdown template
+      that ships with this package. Thus, it seems useful to list it
+      in the Imports field. I would prefer not to list it in the Suggests
+      field, since doing so would require making the RMarkdown template
+      potentially more confusing for users by requiring that I add a
+      check to it that pander is installed.
 
 ## Downstream dependencies
 

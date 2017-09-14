@@ -20,6 +20,7 @@ Imports:
     corrplot,
     gtools,
     grid,
+    pander,
     purrr,
     reshape2,
     qgraph,

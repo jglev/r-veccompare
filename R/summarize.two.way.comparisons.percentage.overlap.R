@@ -24,13 +24,9 @@
 #'
 #' summarize.two.way.comparisons.percentage.overlap(
 #' 	veccompare::example.vectors.list,
-#' 	output_type = "matrix_plot"
+#' 	output_type = "matrix_plot" # You can also choose "network_graph"
 #' )
 #'
-#' summarize.two.way.comparisons.percentage.overlap(
-#' 	veccompare::example.vectors.list,
-#' 	output_type = "network_graph"
-#' )
 summarize.two.way.comparisons.percentage.overlap <- function(
 	named_list_of_vectors_to_compare,
 	output_type = "table", # c("table", "matrix_plot", "network_graph")
@@ -97,23 +93,23 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 
 		par(xpd=TRUE)
 
-		corrplot::corrplot(
-			output_table,
-			method="number",
-			is.corr = FALSE,
-			tl.col = "black", # Set title color to black
-			diag = FALSE,
-			order = "alphabet",
+		return(
+			corrplot::corrplot(
+				output_table,
+				method="number",
+				is.corr = FALSE,
+				tl.col = "black", # Set title color to black
+				diag = FALSE,
+				order = "alphabet",
 
-			# Widen the legend:
-			cl.ratio = 0.2,
-			cl.align = "r",
-			cl.lim = c(0, 1.0),
-			tl.cex = 0.8, # Title font size ratio.
-			mar = margins_for_plot
+				# Widen the legend:
+				cl.ratio = 0.2,
+				cl.align = "r",
+				cl.lim = c(0, 1.0),
+				tl.cex = 0.8, # Title font size ratio.
+				mar = margins_for_plot
+			)
 		)
-
-		# return(plot_of_table)
 	} else if(output_type == "table"){
 		if(melt_table == TRUE){
 			melted_matrix <- reshape2::melt(as.matrix(output_table))
@@ -138,30 +134,32 @@ summarize.two.way.comparisons.percentage.overlap <- function(
 		list_item_sizes <- sapply(named_list_of_vectors_to_compare[order(names(named_list_of_vectors_to_compare))], length)
 		list_item_relative_sizes <- list_item_sizes / max(list_item_sizes)*10
 
-		qgraph::qgraph(
-			output_table[order(rownames(output_table)), order(colnames(output_table))], # We're alphabetizing row and column name orders here to more easily match up with the values for the 'nodeNames' argument below.
-			esize = 5,
-			directed = TRUE,
-			theme = "gray",
-			edge.labels = TRUE,
-			shape = "circle",
-			vsize = list_item_relative_sizes, # Get the size of each list object in the order it appears in the melted table (this is from using 'vsize = c(1,2,3,4,5,6)' and noting that the size increases were in line with the output of 'unique(melted_matrix$Vector_Name)')
-			minimum = network_graph_minimum,
-			threshold = -1, # Set this lower than 0, to effectively turn it off.
-			DoNotPlot = FALSE,
+		return(
+			qgraph::qgraph(
+				output_table[order(rownames(output_table)), order(colnames(output_table))], # We're alphabetizing row and column name orders here to more easily match up with the values for the 'nodeNames' argument below.
+				esize = 5,
+				directed = TRUE,
+				theme = "gray",
+				edge.labels = TRUE,
+				shape = "circle",
+				vsize = list_item_relative_sizes, # Get the size of each list object in the order it appears in the melted table (this is from using 'vsize = c(1,2,3,4,5,6)' and noting that the size increases were in line with the output of 'unique(melted_matrix$Vector_Name)')
+				minimum = network_graph_minimum,
+				threshold = -1, # Set this lower than 0, to effectively turn it off.
+				DoNotPlot = FALSE,
 
-			layout = "circle",
+				layout = "circle",
 
-			legend = TRUE,
-			labels = c(1:length(named_list_of_vectors_to_compare)), # names(named_list_of_vectors_to_compare)[order(names(named_list_of_vectors_to_compare))], # Note: There seems to be a bug with this package when using an edge list and this option, which is why I'm using output_table here above.
-			label.scale = TRUE,
-			label.scale.equal = FALSE,
-			label.cex = 2,
-			#groups = names(named_list_of_vectors_to_compare)[order(names(named_list_of_vectors_to_compare))], # Cause the nodes to be colored based on their names.
+				legend = TRUE,
+				labels = c(1:length(named_list_of_vectors_to_compare)), # names(named_list_of_vectors_to_compare)[order(names(named_list_of_vectors_to_compare))], # Note: There seems to be a bug with this package when using an edge list and this option, which is why I'm using output_table here above.
+				label.scale = TRUE,
+				label.scale.equal = FALSE,
+				label.cex = 2,
+				#groups = names(named_list_of_vectors_to_compare)[order(names(named_list_of_vectors_to_compare))], # Cause the nodes to be colored based on their names.
 
-			nodeNames = names(named_list_of_vectors_to_compare)[order(names(named_list_of_vectors_to_compare))],
-			legend.cex = 0.3,
-			mar = margins_for_plot
+				nodeNames = names(named_list_of_vectors_to_compare)[order(names(named_list_of_vectors_to_compare))],
+				legend.cex = 0.3,
+				mar = margins_for_plot
+			)
 		)
 
 		# return(qgraph_output)
