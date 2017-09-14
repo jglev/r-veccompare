@@ -11,7 +11,7 @@
 #' @return
 #' A winnowed version of \code{output_from_compare.vectors}. Depending on arguments, either a list, a vector, or a string.
 #'
-#' @export
+#' @export extract.compared.vectors
 #'
 #' @examples
 #' example <- veccompare::compare.vectors(veccompare::example.vectors.list)

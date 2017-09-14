@@ -7,7 +7,7 @@
 #' @param suppress_messages A logical (TRUE/FALSE) indicator whether to suppress messages.
 #'
 #' @return A vector of the values of \code{set_1} that are not present in \code{set_2}. Put differently, a vector resulting from subtracting \code{set_2} from \code{set_1}.
-#' @export
+#' @export which.of.one.set.is.not.in.another
 #'
 #' @examples
 #' veccompare::which.of.one.set.is.not.in.another(

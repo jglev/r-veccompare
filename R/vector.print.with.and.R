@@ -5,7 +5,7 @@
 #' @param use_oxford_comma A logical (TRUE/FALSE) value indicating whether to use an Oxford comma ("One, two, and three" vs. "One, two and three").
 #'
 #' @return A single string that concatenates the input, separating with commas and adding "and" before the final item.
-#' @export
+#' @export vector.print.with.and
 #'
 #' @examples
 #' vector.print.with.and(c("One", "Two", "Three", "Four"))

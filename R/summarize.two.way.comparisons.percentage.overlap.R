@@ -12,7 +12,7 @@
 #'
 #' If \code{output} is \code{"table"} and \code{melt_table} is \code{TRUE}, the output will be a \code{\link[reshape2]{melt}ed} data.frame with three columns: \code{Vector_Name}, \code{Overlaps_With}, and \code{Decimal_Percentage}.
 #'
-#' @export
+#' @export summarize.two.way.comparisons.percentage.overlap
 #'
 #' @examples
 #' summarize.two.way.comparisons.percentage.overlap(veccompare::example.vectors.list)

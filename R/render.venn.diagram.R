@@ -6,7 +6,7 @@
 #' @param viewport_npc_width_height_for_images The scale at which to print an image. If the image is cut off at its edges, for example, this can be set lower than 1.0.
 #'
 #' @return The function will not return a value; rather, it will print the image.
-#' @export
+#' @export render.venn.diagram
 #'
 #' @examples
 #' # Create comparisons across 5 vectors, specifically creating all 4-way venn diagrams from them:
