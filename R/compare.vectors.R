@@ -25,7 +25,7 @@
 #' }
 #'
 #' To compile this list object into a Markdown report, use \code{\link{compare.vectors.and.return.text.analysis.of.overlap}}. For an example of this usage, see the \code{Veccompare Overlap Report} RMarkdown template for RStudio that is installed as part of the \pkg{veccompare} package.
-#' @export
+#' @export compare.vectors
 #'
 #' @examples
 #' example <- veccompare::compare.vectors(veccompare::example.vectors.list)

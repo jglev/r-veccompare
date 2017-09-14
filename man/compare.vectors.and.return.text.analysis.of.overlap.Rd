@@ -6,7 +6,7 @@
 \title{Create a Markdown report from the output of \code{\link{compare.vectors}}}
 \usage{
 
-  compare.vectors.and.return.text.analysis.of.overlap(named_list_of_vectors_to_compare,
+  \method{compare}{vectors.and.return.text.analysis.of.overlap}(named_list_of_vectors_to_compare,
   degrees_of_comparison_to_include = NULL, cat_immediately = FALSE,
   draw_venn_diagrams = FALSE, viewport_npc_width_height_for_images = 1,
   vector_colors_for_venn_diagrams = NULL, save_venn_diagram_files = FALSE,

@@ -4,7 +4,7 @@
 \alias{compare.vectors}
 \title{Compare all combinations of vectors using set operations}
 \usage{
-compare.vectors(named_list_of_vectors_to_compare,
+\method{compare}{vectors}(named_list_of_vectors_to_compare,
   degrees_of_comparison_to_include = NULL, draw_venn_diagrams = FALSE,
   vector_colors_for_venn_diagrams = NULL, save_venn_diagram_files = FALSE,
   location_for_venn_diagram_files = "", prefix_for_venn_diagram_files = "",

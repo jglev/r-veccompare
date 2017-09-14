@@ -16,7 +16,7 @@
 #'
 #' NOTE WELL: If \code{cat_immediately} is \code{FALSE}, the output \emph{should} be saved to an object. If it is not, R will give an error message when printing to the console, because of unescaped special characters (which work correctly when \code{cat()} is used).
 #'
-#' @export
+#' @export compare.vectors.and.return.text.analysis.of.overlap
 #'
 #' @examples
 #' example <- compare.vectors.and.return.text.analysis.of.overlap(

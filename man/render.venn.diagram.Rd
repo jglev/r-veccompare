@@ -37,6 +37,8 @@ diagram <- veccompare::extract.compared.vectors(
 # Print the diagram:
 veccompare::render.venn.diagram(
   diagram,
-  viewport_npc_width_height_for_images = .7 # Scale the image down to 70\%, in case it otherwise gets cut off at the margins.
+  viewport_npc_width_height_for_images = .7
+     # Scale the image down to 70\%,
+     # in case it otherwise gets cut off at the margins.
 )
 }
