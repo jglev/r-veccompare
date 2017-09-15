@@ -17,6 +17,14 @@ Roles: conceptor, consultant, data contributor
 
 ## Installation
 
+You can download the latest stable version from [CRAN](https://cran.r-project.org/web/packages/veccompare/index.html "CRAN page for veccompare"):
+
+```{r}
+install.packages('veccompare')
+```
+
+You can download the latest development version from [GitHub](https://github.com/publicus/r-veccompare "GitHub repository for veccompare"):
+
 ```{r}
 # You can install the development version of veccompare from GitHub:
 # install.packages("devtools")
